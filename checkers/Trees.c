@@ -92,9 +92,9 @@ SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char p
                     if (board[nRow][nCol] == NULL)
                     {
                         capturesSoFar++;
-                        copyBoard[row][col] = '\0'; //changing current checkerPos
-                        copyBoard[row + 1][col + 1] = '\0'; //eaten
-                        copyBoard[nRow][nCol] = 'T'; //moving 'T' 2 cols right 2 rows down
+                        copyBoard[row][col] = EMPTY_POS; //changing current checkerPos
+                        copyBoard[row + 1][col + 1] = EMPTY_POS; //eaten
+                        copyBoard[nRow][nCol] = PLAYER_ONE; //moving 'T' 2 cols right 2 rows down
                         root->next_move[LEFT] = buildTreeHelper(copyBoard, nRow, nRow, player, capturesSoFar);
                     }
                 }
@@ -105,14 +105,14 @@ SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char p
 
             }
 
-            else if (left == '\0' && capturesSoFar == 0)
+            else if (left == EMPTY_POS && capturesSoFar == 0)
             {
                 capturesSoFar = 0;
                 nRow = row + 1;
                 nCol = col - 1;
                 root->next_move[LEFT] = createNewTNode(board, nRow, nCol, capturesSoFar, NULL, NULL);
-                copyBoard[row][col] = '\0'; //changing current checkerPos
-                copyBoard[nRow][nCol] = 'T'; //moving 'T' left and down
+                copyBoard[row][col] = EMPTY_POS; //changing current checkerPos
+                copyBoard[nRow][nCol] = PLAYER_ONE; //moving 'T' left and down
             }
 
         }
@@ -155,8 +155,8 @@ SingleSourceMovesTreeNode* createNewTNode(Board board, int row, int col, unsigne
         printf("Error! Failed to allocate memory\n");
         exit(1);
     }
-    pos->col = '0' + col;
-    pos->row = 'A' + row;
+    pos->col = CHAR_0 + col;
+    pos->row = CHAR_A + row;
 
 
     copyBorad(board, res->board);
@@ -164,6 +164,7 @@ SingleSourceMovesTreeNode* createNewTNode(Board board, int row, int col, unsigne
     res->total_captures_so_far = captures;
     res->next_move[LEFT] = nextMoveLeft;
     res->next_move[RIGHT] = nextMoveRight;
+    return res;
 }
 
 void memoryAllocationCheckTree(SingleSourceMovesTree* res) {

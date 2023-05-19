@@ -58,3 +58,12 @@ void createBoard(Board board) {
     }//for1
 }
 
+void copyBorad(Board board, Board copyBoard)
+{
+    int i, j;
+    for (i = 0; i < BOARD_SIZE; i++) {
+        for (j = 0; j < BOARD_SIZE; j++) {
+            copyBoard[i][j] = board[i][j];
+        }
+    }
+}
