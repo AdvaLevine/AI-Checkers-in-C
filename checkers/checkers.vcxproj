@@ -127,7 +127,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="List.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="others.c" />
     <ClCompile Include="Trees.c" />
   </ItemGroup>
   <ItemGroup>

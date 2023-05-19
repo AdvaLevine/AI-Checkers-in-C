@@ -6,6 +6,7 @@
 #include<stdio.h>
 #include <stdlib.h>
 #include "Trees.h"
+#include "Lists.h"
 //contants
 #define BOARD_SIZE 8
 #define ROW_0 0
@@ -29,5 +30,10 @@ typedef unsigned char Board[BOARD_SIZE][BOARD_SIZE];
 
 //player char T\B
 typedef unsigned char Player;
+
+
+
+//functions
+void createBoard(Board board);
 
 #endif //MAIN_H

@@ -15,4 +15,8 @@ typedef struct _SingleSourceMovesTree {
     SingleSourceMovesTreeNode* source;
 }SingleSourceMovesTree;
 
+//functions 
+SingleSourceMovesTree* FindSingleSourceMoves(Board board, checkersPos* src);
+
+
 #endif //TREE_H
