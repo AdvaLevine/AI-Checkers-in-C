@@ -16,13 +16,13 @@ SingleSourceMovesTree* FindSingleSourceMoves(Board board, checkersPos* src) {
     //memory allocation check
     memoryAllocationCheckTree(res);
 
-    //checkers pos isnt empty
-    if (player == '\0')
+    //checker pos is empty
+    if (player == EMPTY_POS)
         return NULL;
 
+    //checkers pos isnt empty
     else {
-
-        res->source = buildTreeHelper(board, row, col, player, capturesSoFar);//recursive function to create the tree for the checkers pos
+        res->source = buildTreeHelper(board, row, col, player, capturesSoFar);//recursive function to create the tree for the checkers pos moves
 
     }
     return res;
@@ -93,7 +93,7 @@ SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char p
                     {
                         capturesSoFar++;
                         copyBoard[row][col] = EMPTY_POS; //changing current checkerPos
-                        copyBoard[row + 1][col + 1] = EMPTY_POS; //eaten
+                        copyBoard[row+1][col + 1] = EMPTY_POS; //eaten
                         copyBoard[nRow][nCol] = PLAYER_ONE; //moving 'T' 2 cols right 2 rows down
                         root->next_move[LEFT] = buildTreeHelper(copyBoard, nRow, nRow, player, capturesSoFar);
                     }
@@ -142,11 +142,7 @@ SingleSourceMovesTreeNode* createNewTNode(Board board, int row, int col, unsigne
 
     res = (SingleSourceMovesTreeNode*)malloc(sizeof(SingleSourceMovesTreeNode));
 
-    if (res == NULL)
-    {
-        printf("Error! Failed to allocate memory\n");
-        exit(1);
-    }
+    memoryAllocationCheckTree(res);
 
     pos = (checkersPos*)malloc(sizeof(checkersPos));
 
