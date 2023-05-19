@@ -1,18 +1,18 @@
 #include "main.h"
+#include "Trees.h"
 
-//functions call
-void createBoard(Board board); 
-void copyBorad(Board board, Board copyBoard);
-SingleSourceMovesTree* FindSingleSourceMoves(Board board, checkersPos* src);
-SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char player, unsigned short capturesSoFar);
-SingleSourceMovesTreeNode* createNewTNode(Board board, int row, int col, unsigned short captures,
-SingleSourceMovesTreeNode* nextMoveLeft, SingleSourceMovesTreeNode* nextMoveRight);
+////functions call
+//void createBoard(Board board); 
+//void copyBorad(Board board, Board copyBoard);
+//SingleSourceMovesTree* FindSingleSourceMoves(Board board, checkersPos* src);
+//SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char player, unsigned short capturesSoFar);
+//SingleSourceMovesTreeNode* createNewTNode(Board board, int row, int col, unsigned short captures,
+//SingleSourceMovesTreeNode* nextMoveLeft, SingleSourceMovesTreeNode* nextMoveRight);
 
 
 //main function
 void main()
 {
-
     Board board;
     createBoard(board);
     checkersPos pos = { 'A',3 }; //testing
@@ -25,52 +25,49 @@ void main()
 SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char player, unsigned short capturesSoFar)
 {
     SingleSourceMovesTreeNode* root;
-    Board copyBoard;
+    Board copyBoard;//new board each rec call
     char left, right;
-    int nRow, nCol; //next col and row
+    int nRow, nCol; //next new col and row
 
-    //if we excced the board size we return
 
     root = createNewTNode(board, row, col, capturesSoFar, NULL, NULL);
 
     copyBorad(board, copyBoard);
-    //if the player is T
-    if (player == 'T')
+    //if the player is T he's moving downwards
+    if (player == PLAYER_ONE)
     {
-        if (row >= BOARD_SIZE - 1) //bottom of board, no moves to do
+        if (row >= BOARD_SIZE - 1) //bottom of the board, no moves to do
             return root;
-
-        //moving "forward" down
 
         if (col < BOARD_SIZE - 1)
         {
             right = board[col + 1][row + 1];
             //copyBorad(board, copyBoard);
-            if (right == 'B')
+            if (right == PLAYER_TWO)
             {
-                if (col <= 5 && row <= 5) //if still can eat
+                if (col <= MAX_COL && row <= MAX_ROW) //if still can eat
                 {
                     nRow = row + 2;
                     nCol = col + 2;
                     if (board[nRow][nCol] == NULL)
                     {
                         capturesSoFar++;
-                        copyBoard[row][col] = '\0'; //changing current checkerPos
-                        copyBoard[row + 1][col + 1] = '\0'; //eaten
-                        copyBoard[nRow][nCol] = 'T'; //moving 'T' 2 cols right 2 rows down
+                        copyBoard[row][col] = EMPTY_POS; //changing current checkerPos
+                        copyBoard[row + 1][col + 1] = EMPTY_POS; //eaten
+                        copyBoard[nRow][nCol] = PLAYER_ONE; //moving 'T' 2 cols right 2 rows down
                         root->next_move[RIGHT] = buildTreeHelper(copyBoard, nRow, nRow, player, capturesSoFar);
                     }
                     //else
                     //    root->next_move[RIGHT] = NULL;
                 }
             }
-            else if (right == '\0' && capturesSoFar == 0)
+            else if (right == EMPTY_POS && capturesSoFar == 0)
             {
                 capturesSoFar = 0;
                 nRow = row + 1;
                 nCol = col + 1;
-                copyBoard[row][col] = '\0'; //changing current checkerPos
-                copyBoard[nRow][nCol] = 'T'; //moving 'T' right and down //create Tnode?
+                copyBoard[row][col] = EMPTY_POS; //changing current checkerPos
+                copyBoard[nRow][nCol] = PLAYER_ONE; //moving 'T' right and down //create Tnode?
                 root->next_move[RIGHT] = createNewTNode(copyBoard, nRow, nCol, capturesSoFar, NULL, NULL);
             }
         }
@@ -80,9 +77,9 @@ SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char p
             left = board[col - 1][row + 1];
             //copyBorad(board, copyBoard);
 
-            if (left == 'B')
+            if (left == PLAYER_TWO)
             {
-                if (col >= 2 && row <= 5) //if still can eat
+                if (col >= 2 && row <= MAX_ROW) //if still can eat
                 {
                     nRow = row + 2;
                     nCol = col - 2;

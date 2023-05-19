@@ -5,8 +5,8 @@
 //libraries
 #include<stdio.h>
 #include <stdlib.h>
-#include "Trees.h"
 #include "Lists.h"
+
 //contants
 #define BOARD_SIZE 8
 #define ROW_0 0
@@ -16,8 +16,10 @@
 #define CHAR_0 0
 #define EMPTY_POS '\0'
 #define CAPTURE_MOVE 2
-#define LIMIT_ROW 5
-#define LIMIT_COL 5
+#define MAX_ROW 5
+#define MAX_COL 5
+#define PLAYER_ONE 'T'
+#define PLAYER_TWO 'B'
 //structs
 //checkers tool position on board
 typedef struct _checkersPos {
@@ -32,8 +34,7 @@ typedef unsigned char Board[BOARD_SIZE][BOARD_SIZE];
 typedef unsigned char Player;
 
 
-
 //functions
 void createBoard(Board board);
-
+void copyBorad(Board board, Board copyBoard);
 #endif //MAIN_H

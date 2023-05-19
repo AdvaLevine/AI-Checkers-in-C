@@ -17,6 +17,9 @@ typedef struct _SingleSourceMovesTree {
 
 //functions 
 SingleSourceMovesTree* FindSingleSourceMoves(Board board, checkersPos* src);
-
+void memoryAllocationCheckTree(SingleSourceMovesTree* res);
+SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char player, unsigned short capturesSoFar);
+SingleSourceMovesTreeNode* createNewTNode(Board board, int row, int col, unsigned short captures,
+    SingleSourceMovesTreeNode* nextMoveLeft, SingleSourceMovesTreeNode* nextMoveRight);
 
 #endif //TREE_H
