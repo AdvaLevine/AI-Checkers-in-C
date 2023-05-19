@@ -253,6 +253,7 @@ SingleSourceMovesTreeNode* createNewTNode(Board board, int row, int col, unsigne
     res->total_captures_so_far = captures;
     res->next_move[LEFT] = nextMoveLeft;
     res->next_move[RIGHT] = nextMoveRight;
+    int a = 5;
 }
 
 void copyBorad(Board board, Board copyBoard)
