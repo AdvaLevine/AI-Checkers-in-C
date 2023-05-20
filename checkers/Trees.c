@@ -10,8 +10,6 @@ SingleSourceMovesTree* FindSingleSourceMoves(Board board, checkersPos* src) {
     char player = board[row][col];
     unsigned short capturesSoFar = 0;
     SingleSourceMovesTree* res;
-    int Hi = 9;
-    int bye = 0;
     res = (SingleSourceMovesTree*)malloc(sizeof(SingleSourceMovesTree));
 
     //memory allocation check
