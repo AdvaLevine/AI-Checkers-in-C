@@ -26,7 +26,7 @@ SingleSourceMovesTree* FindSingleSourceMoves(Board board, checkersPos* src) {
 
     }
     return res;
-    int i = 0;
+
 }
 //This function is creating the tree for one move possibilities of the checkers pos
 SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char player, unsigned short capturesSoFar)
