@@ -15,7 +15,7 @@ void createBoard(Board board) {
 
             if (i % 2 == 0) {//row is even number
                 if (j % 2 != 0)
-                    board[i][j] = PLAYER_ONE;
+                    board[i][j] = PLAYER_T;
                 else
                     board[i][j] = EMPTY_POS;
             }
@@ -23,7 +23,7 @@ void createBoard(Board board) {
                 if (j % 2 != 0)
                     board[i][j] =EMPTY_POS;
                 else
-                    board[i][j] = PLAYER_ONE;
+                    board[i][j] = PLAYER_T;
             }
 
         }//for2
@@ -44,7 +44,7 @@ void createBoard(Board board) {
         for (j = 0; j < BOARD_SIZE; j++) {
             if (i % 2 == 0) {//row is even number
                 if (j % 2 != 0)
-                    board[i][j] = PLAYER_TWO;
+                    board[i][j] = PLAYER_B;
                 else
                     board[i][j] = EMPTY_POS;
             }
@@ -52,7 +52,7 @@ void createBoard(Board board) {
                 if (j % 2 != 0)
                     board[i][j] = EMPTY_POS;
                 else
-                    board[i][j] = PLAYER_TWO;
+                    board[i][j] = PLAYER_B;
             }
         }//for2
     }//for1

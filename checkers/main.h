@@ -18,8 +18,8 @@
 #define CAPTURE_MOVE 2
 #define MAX_ROW 5
 #define MAX_COL 5
-#define PLAYER_ONE 'T'
-#define PLAYER_TWO 'B'
+#define PLAYER_T 'T'
+#define PLAYER_B 'B'
 
 
 //structs
