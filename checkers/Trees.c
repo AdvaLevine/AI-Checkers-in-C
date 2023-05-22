@@ -6,21 +6,20 @@
 SingleSourceMovesTree* FindSingleSourceMoves(Board board, checkersPos* src) {
 
     int row = (src->row) - CHAR_A; //from letter to number
-    int col = (src->col) - CHAR_0; //from char number to int number
+    int col = (src->col) - CHAR_0 -1; //from char number to int number
     char player = board[row][col];
     unsigned short capturesSoFar = 0;
     SingleSourceMovesTree* res;
-    res = (SingleSourceMovesTree*)malloc(sizeof(SingleSourceMovesTree));
-
-    //memory allocation check
-    memoryAllocationCheckTree(res);
-
     //checker pos is empty
     if (player == EMPTY_POS)
         return NULL;
 
     //checkers pos isnt empty
     else {
+        res = (SingleSourceMovesTree*)malloc(sizeof(SingleSourceMovesTree));
+
+        //memory allocation check
+        memoryAllocationCheckTree(res);
         res->source = buildTreeHelper(board, row, col, player, capturesSoFar);//recursive function to create the tree for the checkers pos moves
 
     }
@@ -31,28 +30,29 @@ SingleSourceMovesTree* FindSingleSourceMoves(Board board, checkersPos* src) {
 SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char player, unsigned short capturesSoFar)
 {
     SingleSourceMovesTreeNode* root;
-    Board copyBoard;//new board each rec call
+    Board copyBoardRight, copyBoardLeft;//new board each rec call
     char left, right;
     int nRow, nCol; //next new col and row
 
 
     root = createNewTNode(board, row, col, capturesSoFar, NULL, NULL);
 
-    copyBorad(board, copyBoard);
+    //copyBorad(board, copyBoard);
     //if the player is T he's moving downwards
     if (player == PLAYER_T)
     {
         if (row >= BOARD_SIZE - 1) //bottom of the board, no moves to do
             return root;
 
-        if (col < BOARD_SIZE-1)
+        if (col < BOARD_SIZE-1) //can go right
         {
-            right = board[col + 1][row + 1];
-            //copyBorad(board, copyBoard);
+            right = board[row + 1][col + 1];
+            copyBorad(board, copyBoardRight); //לבדוק אחכ אם אפשר להכניס לבפנים, שלא יעתיק סתם אם לא צריך
             if (right == PLAYER_B)
             {
                 if (col <= MAX_COL && row <= MAX_ROW) //if still can eat
                 {
+                    unsigned int tempCaptures = captureMove;
                     nRow = row ;
                     nCol = col;
                     //if (board[nRow][nCol] == NULL)
@@ -61,28 +61,28 @@ SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char p
                     //    copyBoard[row][col] = EMPTY_POS; //changing current checkerPos
                     //    copyBoard[row + 1][col + 1] = EMPTY_POS; //eaten
                     //    copyBoard[nRow][nCol] = PLAYER_T; //moving 'T' 2 cols right 2 rows down
-                    captureMove(player, RIGHT, board,row , col,&nRow,&nCol, &capturesSoFar, copyBoard);
-                    root->next_move[RIGHT] = buildTreeHelper(copyBoard, nRow, nCol, player, capturesSoFar);
+                    captureMove(player, RIGHT, board,row , col,&nRow,&nCol, &tempCaptures, copyBoardRight);
+                    root->next_move[RIGHT] = buildTreeHelper(copyBoardRight, nRow, nCol, player, tempCaptures);
                     /*}*/
                     //else
                     //    root->next_move[RIGHT] = NULL;
                 }
             }
-            else if (right == EMPTY_POS && capturesSoFar == 0)
+            else if (right == EMPTY_POS && capturesSoFar == 0) //no captures, one move to go
             {
                 capturesSoFar = 0;
                 nRow = row + 1;
                 nCol = col + 1;
-                copyBoard[row][col] = EMPTY_POS; //changing current checkerPos
-                copyBoard[nRow][nCol] = PLAYER_T; //moving 'T' right and down //create Tnode?
-                root->next_move[RIGHT] = createNewTNode(copyBoard, nRow, nCol, capturesSoFar, NULL, NULL);
+                copyBoardRight[row][col] = EMPTY_POS; //changing current checkerPos
+                copyBoardRight[nRow][nCol] = PLAYER_T; //moving 'T' right and down //create Tnode?
+                root->next_move[RIGHT] = createNewTNode(copyBoardRight, nRow, nCol, capturesSoFar, NULL, NULL);
             }
         }
 
         if (col >0)
         {
-            left = board[col - 1][row + 1];
-            //copyBorad(board, copyBoard);
+            left = board[row + 1][col - 1];
+            copyBorad(board, copyBoardLeft);
 
             if (left == PLAYER_B)
             {
@@ -96,8 +96,9 @@ SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char p
                     //    copyBoard[row][col] = EMPTY_POS; //changing current checkerPos
                     //    copyBoard[row+1][col + 1] = EMPTY_POS; //eaten
                     //    copyBoard[nRow][nCol] = PLAYER_T; //moving 'T' 2 cols right 2 rows down
-                    captureMove(player, LEFT, board, row, col,&nRow,&nCol, &capturesSoFar, copyBoard);
-                    root->next_move[LEFT] = buildTreeHelper(copyBoard, nRow, nCol, player, capturesSoFar);
+                    unsigned int tempCaptures = captureMove;
+                    captureMove(player, LEFT, board, row, col,&nRow,&nCol, &tempCaptures, copyBoardLeft);
+                    root->next_move[LEFT] = buildTreeHelper(copyBoardLeft, nRow, nCol, player, tempCaptures);
                     //}
                 }
 
@@ -107,14 +108,14 @@ SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char p
 
             }
 
-            else if (left == EMPTY_POS && capturesSoFar == 0)
+            else if (left == EMPTY_POS && capturesSoFar == 0) //no captures, one move to go
             {
                 capturesSoFar = 0;
                 nRow = row + 1;
                 nCol = col - 1;
-                root->next_move[LEFT] = createNewTNode(board, nRow, nCol, capturesSoFar, NULL, NULL);
-                copyBoard[row][col] = EMPTY_POS; //changing current checkerPos
-                copyBoard[nRow][nCol] = PLAYER_T; //moving 'T' left and down
+                copyBoardLeft[row][col] = EMPTY_POS; //changing current checkerPos
+                copyBoardLeft[nRow][nCol] = PLAYER_T; //moving 'T' left and down
+                root->next_move[LEFT] = createNewTNode(copyBoardLeft, nRow, nCol, capturesSoFar, NULL, NULL);
             }
 
         }
@@ -130,7 +131,8 @@ SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char p
         if (row < 0) //top of the board, no moves to do
             return root;
         if (col >= BOARD_SIZE - 1) {
-            right = board[col + 1][row + 1];
+            right = board[row + 1][col + 1];
+            copyBorad(board, copyBoardRight);
             //capture move for B
             if (right == PLAYER_T)
             {
@@ -144,8 +146,8 @@ SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char p
                     //    copyBoard[row][col] = EMPTY_POS; //changing current checkerPos
                     //    copyBoard[row + 1][col + 1] = EMPTY_POS; //eaten
                     //    copyBoard[nRow][nCol] = PLAYER_B; //moving 'T' 2 cols right 2 rows down
-                    captureMove(player, RIGHT, board, row, col, &nRow, &nCol, &capturesSoFar, copyBoard);
-                    root->next_move[RIGHT] = buildTreeHelper(copyBoard, nRow, nRow, player, capturesSoFar);
+                    captureMove(player, RIGHT, board, row, col, &nRow, &nCol, &capturesSoFar, copyBoardRight);
+                    root->next_move[RIGHT] = buildTreeHelper(copyBoardRight, nRow, nRow, player, capturesSoFar);
                     //}
                     //else
                     //    root->next_move[RIGHT] = NULL;
@@ -155,16 +157,16 @@ SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char p
                     capturesSoFar = 0;
                     nRow = row - 1;
                     nCol = col + 1;
-                    copyBoard[row][col] = EMPTY_POS; //changing current checkerPos
-                    copyBoard[nRow][nCol] = PLAYER_B; //moving 'B' right and up 
-                    root->next_move[RIGHT] = createNewTNode(copyBoard, nRow, nCol, capturesSoFar, NULL, NULL);
+                    copyBoardRight[row][col] = EMPTY_POS; //changing current checkerPos
+                    copyBoardRight[nRow][nCol] = PLAYER_B; //moving 'B' right and up 
+                    root->next_move[RIGHT] = createNewTNode(copyBoardRight, nRow, nCol, capturesSoFar, NULL, NULL);
                 }
             }
         }
         if (col > 0)
         {
-            left = board[col - 1][row + 1];
-            //copyBorad(board, copyBoard);
+            left = board[row +1 ][col - 1];
+            copyBorad(board, copyBoardLeft);
 
             if (left == PLAYER_T)
             {
@@ -178,8 +180,8 @@ SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char p
                     //    copyBoard[row][col] = EMPTY_POS; //changing current checkerPos
                     //    copyBoard[row+1][col + 1] = EMPTY_POS; //eaten
                     //    copyBoard[nRow][nCol] = PLAYER_T; //moving 'T' 2 cols right 2 rows down
-                    captureMove(player, LEFT, board, row, col, &nRow, &nCol, &capturesSoFar, copyBoard);
-                    root->next_move[LEFT] = buildTreeHelper(copyBoard, nRow, nCol, player, capturesSoFar);
+                    captureMove(player, LEFT, board, row, col, &nRow, &nCol, &capturesSoFar, copyBoardLeft);
+                    root->next_move[LEFT] = buildTreeHelper(copyBoardLeft, nRow, nCol, player, capturesSoFar);
                     //}
                 }
 
@@ -194,9 +196,9 @@ SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char p
                 capturesSoFar = 0;
                 nRow = row - 1;
                 nCol = col - 1;
-                root->next_move[LEFT] = createNewTNode(board, nRow, nCol, capturesSoFar, NULL, NULL);
-                copyBoard[row][col] = EMPTY_POS; //changing current checkerPos
-                copyBoard[nRow][nCol] = PLAYER_B; //moving 'B' left and down
+                copyBoardLeft[row][col] = EMPTY_POS; //changing current checkerPos
+                copyBoardLeft[nRow][nCol] = PLAYER_B; //moving 'B' left and down
+                root->next_move[LEFT] = createNewTNode(copyBoardLeft, nRow, nCol, capturesSoFar, NULL, NULL);
             }
 
         }
@@ -219,7 +221,7 @@ SingleSourceMovesTreeNode* createNewTNode(Board board, int row, int col, unsigne
 
     res = (SingleSourceMovesTreeNode*)malloc(sizeof(SingleSourceMovesTreeNode));
 
-    memoryAllocationCheckTree(res);
+    memoryAllocationCheckTreeNode(res);
 
     pos = (checkersPos*)malloc(sizeof(checkersPos));
 
@@ -228,7 +230,7 @@ SingleSourceMovesTreeNode* createNewTNode(Board board, int row, int col, unsigne
         printf("Error! Failed to allocate memory\n");
         exit(1);
     }
-    pos->col = CHAR_0 + col;
+    pos->col = CHAR_0 + col+1;
     pos->row = CHAR_A + row;
 
 
@@ -240,6 +242,14 @@ SingleSourceMovesTreeNode* createNewTNode(Board board, int row, int col, unsigne
     return res;
 }
 
+void memoryAllocationCheckTreeNode(SingleSourceMovesTreeNode* res) {
+    if (res == NULL)
+    {
+        printf("Error! Failed to allocate memory\n");
+        exit(1);
+    }
+}
+
 void memoryAllocationCheckTree(SingleSourceMovesTree* res) {
     if (res == NULL)
     {
@@ -248,7 +258,7 @@ void memoryAllocationCheckTree(SingleSourceMovesTree* res) {
     }
 }
 //function for caprute moves of T an B
-void captureMove(char player,int direction,Board board[][BOARD_SIZE], int row, int col,int* nRow,int*nCol, int* capturesSoFar,Board copyBoard) {
+void captureMove(char player,int direction,Board board, int row, int col,int* nRow,int*nCol, unsigned short* capturesSoFar,Board copyBoard) {
 
     
     if (player == PLAYER_T) {
@@ -266,8 +276,12 @@ void captureMove(char player,int direction,Board board[][BOARD_SIZE], int row, i
         {
           (*capturesSoFar)++;
           copyBoard[row][col] = EMPTY_POS; //changing current checkerPos
-          copyBoard[row + 1][col + 1] = EMPTY_POS; //eaten
           copyBoard[*nRow][*nCol] = PLAYER_T; //moving 'T' 2 cols (right or left) 2 rows down
+          
+          if (direction ==RIGHT)
+            copyBoard[row + 1][col + 1] = EMPTY_POS; //eaten the right B
+          if (direction ==LEFT)
+            copyBoard[row + 1][col - 1] = EMPTY_POS; //eat the left B
         }
     }
     else {//player==PLAYER_B
@@ -281,13 +295,16 @@ void captureMove(char player,int direction,Board board[][BOARD_SIZE], int row, i
             *nRow = row - 2;
             *nCol = col - 2;
         }
-
         if (board[*nRow][*nCol] == NULL)
         {
             (*capturesSoFar)++;
             copyBoard[row][col] = EMPTY_POS; //changing current checkerPos
-            copyBoard[row + 1][col + 1] = EMPTY_POS; //eaten
             copyBoard[*nRow][*nCol] = PLAYER_B; //moving 'B' 2 cols (right or left) 2 rows up
+
+            if (direction == RIGHT)
+                copyBoard[row - 1][col + 1] = EMPTY_POS; //eaten the right A
+            if (direction == LEFT)
+                copyBoard[row - 1][col - 1] = EMPTY_POS; //eat the left A
         }
     }
 }
