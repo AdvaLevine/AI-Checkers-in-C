@@ -23,4 +23,5 @@ SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char p
 SingleSourceMovesTreeNode* createNewTNode(Board board, int row, int col, unsigned short captures,
     SingleSourceMovesTreeNode* nextMoveLeft, SingleSourceMovesTreeNode* nextMoveRight);
 void captureMove(char player, int direction, Board board, int row, int col, int* nRow, int* nCol, unsigned short* capturesSoFar, Board copyBoard);
+void singleMove(SingleSourceMovesTreeNode* root, char player, int direction, Board board, int row, int col, int* nRow, int* nCol, unsigned short* capturesSoFar);
 #endif //TREE_H
