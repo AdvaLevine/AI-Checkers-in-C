@@ -52,7 +52,7 @@ SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char p
             {
                 if (col <= MAX_COL && row <= MAX_ROW) //if still can eat
                 {
-                    unsigned int tempCaptures = captureMove;
+                    unsigned int tempCaptures = capturesSoFar;
                     nRow = row ;
                     nCol = col;
                     //if (board[nRow][nCol] == NULL)
@@ -81,6 +81,7 @@ SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char p
 
         if (col >0)
         {
+            
             left = board[row + 1][col - 1];
             copyBorad(board, copyBoardLeft);
 
@@ -96,7 +97,7 @@ SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char p
                     //    copyBoard[row][col] = EMPTY_POS; //changing current checkerPos
                     //    copyBoard[row+1][col + 1] = EMPTY_POS; //eaten
                     //    copyBoard[nRow][nCol] = PLAYER_T; //moving 'T' 2 cols right 2 rows down
-                    unsigned int tempCaptures = captureMove;
+                    unsigned int tempCaptures = capturesSoFar;
                     captureMove(player, LEFT, board, row, col,&nRow,&nCol, &tempCaptures, copyBoardLeft);
                     root->next_move[LEFT] = buildTreeHelper(copyBoardLeft, nRow, nCol, player, tempCaptures);
                     //}
@@ -146,8 +147,9 @@ SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char p
                     //    copyBoard[row][col] = EMPTY_POS; //changing current checkerPos
                     //    copyBoard[row + 1][col + 1] = EMPTY_POS; //eaten
                     //    copyBoard[nRow][nCol] = PLAYER_B; //moving 'T' 2 cols right 2 rows down
-                    captureMove(player, RIGHT, board, row, col, &nRow, &nCol, &capturesSoFar, copyBoardRight);
-                    root->next_move[RIGHT] = buildTreeHelper(copyBoardRight, nRow, nRow, player, capturesSoFar);
+                    unsigned int tempCaptures = capturesSoFar;
+                    captureMove(player, RIGHT, board, row, col, &nRow, &nCol, &tempCaptures, copyBoardRight);
+                    root->next_move[RIGHT] = buildTreeHelper(copyBoardRight, nRow, nRow, player, tempCaptures);
                     //}
                     //else
                     //    root->next_move[RIGHT] = NULL;
@@ -180,8 +182,9 @@ SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char p
                     //    copyBoard[row][col] = EMPTY_POS; //changing current checkerPos
                     //    copyBoard[row+1][col + 1] = EMPTY_POS; //eaten
                     //    copyBoard[nRow][nCol] = PLAYER_T; //moving 'T' 2 cols right 2 rows down
-                    captureMove(player, LEFT, board, row, col, &nRow, &nCol, &capturesSoFar, copyBoardLeft);
-                    root->next_move[LEFT] = buildTreeHelper(copyBoardLeft, nRow, nCol, player, capturesSoFar);
+                    unsigned int tempCaptures = capturesSoFar;
+                    captureMove(player, LEFT, board, row, col, &nRow, &nCol, &tempCaptures, copyBoardLeft);
+                    root->next_move[LEFT] = buildTreeHelper(copyBoardLeft, nRow, nCol, player, tempCaptures);
                     //}
                 }
 
