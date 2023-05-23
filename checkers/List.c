@@ -11,21 +11,21 @@ SingleSourceMovesList* FindSingleSourceOptimalMove(SingleSourceMovesTree* moves_
 	int row = (moves_tree->source->pos->row) - CHAR_A; //from letter to number
 	int col = (moves_tree->source->pos->col) - CHAR_0 - 1; //from char number to int number
 	char player = (moves_tree->source->board)[row][col];
-	int level = 0;
-	int arr[MAX_CAPTURES_FOR_SINGLE_MOVE] = { 0 };//maybe initilize
-
+	//int level = 0;
+	//int arr[MAX_CAPTURES_FOR_SINGLE_MOVE] = { 0 };//maybe initilize
+	//int colsArr[MAX_CAPTURES_FOR_SINGLE_MOVE] = { 0 };
 	res = (SingleSourceMovesList*)malloc(sizeof(SingleSourceMovesList));
 	checkAllocationList(res);
 	/*makeEmptyList(&res);*/
-	FindMaxRoute(moves_tree->source,player,&capturesOfRoute,arr, MAX_CAPTURES_FOR_SINGLE_MOVE, level);
+	FindMaxRoute(moves_tree->source,player,&capturesOfRoute);
 
-
+	//maxRouteList(res,capturesOfRoute,arr)
+	
 
 	return res;
 }
 
-void FindMaxRoute(SingleSourceMovesTreeNode* source, char player,unsigned short* capturesOfRoute,
-	int arr[],int size, int level) {
+void FindMaxRoute(SingleSourceMovesTreeNode* source, char player,unsigned short* capturesOfRoute) {
 	unsigned short captureRouteLeft, captureRouteRight;
 
 	if (source == NULL) {//if empty tree return
@@ -37,39 +37,46 @@ void FindMaxRoute(SingleSourceMovesTreeNode* source, char player,unsigned short*
 		*capturesOfRoute = source->total_captures_so_far;
 		return;
 	}
+	//create list node
+	//adding the col to compare later to get the best route
+	//colsArr[level] = (source->pos->col)-CHAR_0;
 
-	FindMaxRoute(source->next_move[LEFT], player,&captureRouteLeft,arr, MAX_CAPTURES_FOR_SINGLE_MOVE, level+1);
-	FindMaxRoute(source->next_move[RIGHT], player,&captureRouteRight, arr, MAX_CAPTURES_FOR_SINGLE_MOVE, level+1);
+	FindMaxRoute(source->next_move[LEFT], player,&captureRouteLeft);
+	FindMaxRoute(source->next_move[RIGHT], player,&captureRouteRight);
 	
 	if (captureRouteRight == captureRouteLeft) {//same number of captures
 		//rule in page 2
 		if (player == PLAYER_T) {
-			arr[level] = RIGHT;
+		
 		}
 		else {//player is B
-			arr[level] = LEFT;
+			
 		}
 		*capturesOfRoute = captureRouteRight;//return the max number of capture(they are equal)
 	}
 	//if the captures on the right are more than on left
 	else if (captureRouteRight > captureRouteLeft) {
+
 		*capturesOfRoute = captureRouteRight;
-		arr[level] = RIGHT;
+	
 	}
 	else {//if the captures on the left are more than on right
 		*capturesOfRoute = captureRouteLeft;
-		arr[level] = LEFT;
+		
 	}
 
 }
-//insertDataToEndList(SingleSourceMovesList* lst, checkersPos* pos, unsigned short captures) {
-//	SingleSourceMovesListCell* newTail;
-//	newTail = createNewListCell(pos,captures, NULL);
-//	insertListNodeToEndList(lst, newTail);
-//}
+
+insertDataToEndList(SingleSourceMovesList* lst, checkersPos* pos, unsigned short captures) {
+	SingleSourceMovesListCell* newTail;
+	newTail = createNewListCell(pos,captures, NULL);
+	insertListNodeToEndList(lst, newTail);
+}
+
 void makeEmptyList(SingleSourceMovesList* res) {
 	res->head = res->tail = NULL;
 }
+
 void checkAllocationList(SingleSourceMovesList* res) {
 	if (res == NULL)
 	{
@@ -77,6 +84,7 @@ void checkAllocationList(SingleSourceMovesList* res) {
 		exit(1);
 	}
 }
+
 void checkAllocationListNode(SingleSourceMovesListCell* res) {
 	if (res == NULL)
 	{
@@ -84,6 +92,7 @@ void checkAllocationListNode(SingleSourceMovesListCell* res) {
 		exit(1);
 	}
 }
+
 SingleSourceMovesListCell* createNewListCell(checkersPos* pos, unsigned short captures, SingleSourceMovesListCell* next) {
 	SingleSourceMovesListCell* res;
 	res = (SingleSourceMovesListCell*)malloc(sizeof(SingleSourceMovesListCell));
@@ -93,4 +102,22 @@ SingleSourceMovesListCell* createNewListCell(checkersPos* pos, unsigned short ca
 	res->captures = captures;
 	res->next = next;
 	return res;
+}
+
+void insertListNodeToEndList(SingleSourceMovesList* list, SingleSourceMovesListCell* res) {
+	if (isEmpty(list) == true) {
+		list->head = list->tail = res;
+	}
+	else {
+		list->tail->next = res;
+		list->tail = res;
+	}
+	res->next = NULL;
+}
+
+bool isEmpty(SingleSourceMovesList* list) {
+	if (list->head == NULL)
+		return true;
+	else
+		return false;
 }
