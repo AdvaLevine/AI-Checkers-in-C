@@ -4,14 +4,23 @@
 //main function
 void main()
 {
-   Board board = { {0,0,0,0,0,0,0,0},
+/*    Board board = { {0,0,0,0,0,0,0,0},
+                     {0,0,0,0,0,0,0,0},
+                     {0,0,0,0,0,0,0,0},
+                     {0,0,0,0,0,0,0,0},
+                     {0,0,0,0,'T',0,'T',0},
+                     {0,0,0,0,0,0,0,0},
+                     {0,0,'T',0,'T',0,0,0},
+                     {0,0,0,'B',0,0,0,0} };  */ 
+    
+    Board board = { {0,0,0,'T',0,0,0,0},
+                    {0,0,'B',0,'B',0,0,0},
+                    {0,0,0,0,0,0,0,0},
+                    {0,0,0,0,'B',0,'B',0},
                     {0,0,0,0,0,0,0,0},
                     {0,0,0,0,0,0,0,0},
                     {0,0,0,0,0,0,0,0},
-                    {0,0,0,0,'T',0,'T',0},
-                    {0,0,0,0,0,0,0,0},
-                    {0,0,'T',0,'T',0,0,0},
-                    {0,0,0,'B',0,0,0,0} };
+                    {0,0,0,0,0,0,0,0} };
     //Board board;
     //createBoard(board);
     SingleSourceMovesTree* res;
@@ -19,4 +28,5 @@ void main()
     res = FindSingleSourceMoves(board, &pos);
 
     //free if needed
+    //free treeNodes and free tree source-> free insdie treenode- checkerspos
 }
