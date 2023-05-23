@@ -152,7 +152,7 @@ SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char p
                     //    copyBoard[nRow][nCol] = PLAYER_B; //moving 'T' 2 cols right 2 rows down
                     unsigned short tempCaptures = capturesSoFar;
                     captureMove(player, RIGHT, board, row, col, &nRow, &nCol, &tempCaptures, copyBoardRight);
-                    root->next_move[RIGHT] = buildTreeHelper(copyBoardRight, nRow, nCol, player, tempCaptures);
+                    root->next_move[RIGHT] = buildTreeHelper(copyBoardRight, nRow,nCol , player, tempCaptures);
                     //}
                     //else
                     //    root->next_move[RIGHT] = NULL;
@@ -334,9 +334,9 @@ void singleMove(SingleSourceMovesTreeNode* root, char player, int direction, Boa
         board[*nRow][*nCol] = PLAYER_T; //moving 'T' left/right and down the board
 
         if (direction == RIGHT)
-            root->next_move[RIGHT] = createNewTNode(board, nRow, nCol, capturesSoFar, NULL, NULL);
+            root->next_move[RIGHT] = createNewTNode(board, *nRow, *nCol, *capturesSoFar, NULL, NULL);
         if (direction == LEFT)
-            root->next_move[LEFT] = createNewTNode(board, nRow, nCol, capturesSoFar, NULL, NULL);
+            root->next_move[LEFT] = createNewTNode(board, *nRow, *nCol, *capturesSoFar, NULL, NULL);
 
     }
     else { //player B
@@ -352,9 +352,9 @@ void singleMove(SingleSourceMovesTreeNode* root, char player, int direction, Boa
         board[row][col] = EMPTY_POS; //changing current checkerPos
         board[*nRow][*nCol] = PLAYER_B; //moving 'B' left/right and up
         if (direction==RIGHT)
-            root->next_move[RIGHT] = createNewTNode(board, nRow, nCol, capturesSoFar, NULL, NULL);
+            root->next_move[RIGHT] = createNewTNode(board, *nRow, *nCol, *capturesSoFar, NULL, NULL);
         if(direction==LEFT)
-            root->next_move[LEFT] = createNewTNode(board, nRow, nCol, capturesSoFar, NULL, NULL);
+            root->next_move[LEFT] = createNewTNode(board, *nRow, *nCol, *capturesSoFar, NULL, NULL);
     }
 }
 
