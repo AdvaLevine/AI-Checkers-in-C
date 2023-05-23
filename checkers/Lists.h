@@ -19,6 +19,7 @@ SingleSourceMovesList* FindSingleSourceOptimalMove(SingleSourceMovesTree* moves_
 void makeEmptyList(SingleSourceMovesList* res);
 void checkAllocationList(SingleSourceMovesList* res);
 void checkAllocationListNode(SingleSourceMovesListCell* res);
-void FindMaxRoute(SingleSourceMovesTreeNode* source, char player, unsigned short* capturesOfRoute,int* arr, int level);
+void FindMaxRoute(SingleSourceMovesTreeNode* source, char player, unsigned short* capturesOfRoute,
+	int arr[],int size, int level);
 
 #endif //LIST_H

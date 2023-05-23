@@ -12,19 +12,20 @@ SingleSourceMovesList* FindSingleSourceOptimalMove(SingleSourceMovesTree* moves_
 	int col = (moves_tree->source->pos->col) - CHAR_0 - 1; //from char number to int number
 	char player = (moves_tree->source->board)[row][col];
 	int level = 0;
-	int arr[MAX_CAPTURES_FOR_SINGLE_MOVE];//maybe initilize
+	int arr[MAX_CAPTURES_FOR_SINGLE_MOVE] = { 0 };//maybe initilize
 
 	res = (SingleSourceMovesList*)malloc(sizeof(SingleSourceMovesList));
 	checkAllocationList(res);
 	/*makeEmptyList(&res);*/
-	FindMaxRoute(moves_tree->source,player,&capturesOfRoute,arr, level);
+	FindMaxRoute(moves_tree->source,player,&capturesOfRoute,arr, MAX_CAPTURES_FOR_SINGLE_MOVE, level);
 
 
 
 	return res;
 }
+
 void FindMaxRoute(SingleSourceMovesTreeNode* source, char player,unsigned short* capturesOfRoute,
-	int* arr ,int level) {
+	int arr[],int size, int level) {
 	unsigned short captureRouteLeft, captureRouteRight;
 
 	if (source == NULL) {//if empty tree return
@@ -34,21 +35,21 @@ void FindMaxRoute(SingleSourceMovesTreeNode* source, char player,unsigned short*
 	//if its a leaf, we return the capture move in it
 	else if ((source->next_move[LEFT] == NULL) && (source->next_move[RIGHT] == NULL)) {
 		*capturesOfRoute = source->total_captures_so_far;
+		return;
 	}
 
-	FindMaxRoute(source->next_move[LEFT], player,&captureRouteLeft,arr, level+1);
-	FindMaxRoute(source->next_move[RIGHT], player,&captureRouteRight, arr, level+1);
+	FindMaxRoute(source->next_move[LEFT], player,&captureRouteLeft,arr, MAX_CAPTURES_FOR_SINGLE_MOVE, level+1);
+	FindMaxRoute(source->next_move[RIGHT], player,&captureRouteRight, arr, MAX_CAPTURES_FOR_SINGLE_MOVE, level+1);
 	
 	if (captureRouteRight == captureRouteLeft) {//same number of captures
 		//rule in page 2
 		if (player == PLAYER_T) {
-			*capturesOfRoute = captureRouteRight;
 			arr[level] = RIGHT;
 		}
 		else {//player is B
-			*capturesOfRoute = captureRouteLeft;
 			arr[level] = LEFT;
 		}
+		*capturesOfRoute = captureRouteRight;//return the max number of capture(they are equal)
 	}
 	//if the captures on the right are more than on left
 	else if (captureRouteRight > captureRouteLeft) {

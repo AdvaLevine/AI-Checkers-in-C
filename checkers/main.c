@@ -1,5 +1,6 @@
 #include "main.h"
 #include "Trees.h"
+#include "Lists.h"
 
 //main function
 void main()
@@ -23,9 +24,14 @@ void main()
                     {0,0,0,0,0,0,0,0} };
     //Board board;
     //createBoard(board);
-    SingleSourceMovesTree* res;
-    checkersPos pos = {'H',4 }; //testing
-    res = FindSingleSourceMoves(board, &pos);
+    SingleSourceMovesTree* TreeOfSingleMove;
+    checkersPos pos = {'A',4 }; //testing
+    SingleSourceMovesList* list;
+
+    TreeOfSingleMove = FindSingleSourceMoves(board, &pos);
+
+    list = FindSingleSourceOptimalMove(TreeOfSingleMove);
+
 
     //free if needed
     //free treeNodes and free tree source-> free insdie treenode- checkerspos
