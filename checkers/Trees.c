@@ -319,7 +319,7 @@ void captureMove(char player,int direction,Board board, int row, int col,int* nR
 void singleMove(SingleSourceMovesTreeNode* root, char player, int direction, Board board, int row, int col, int* nRow, int* nCol, unsigned short* capturesSoFar) {
 
     if (player == PLAYER_T) {
-
+        int i = 1;
         *capturesSoFar = 0;
         if (direction == RIGHT) {
             *nRow = row + 1;
