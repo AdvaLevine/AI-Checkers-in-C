@@ -134,8 +134,8 @@ SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char p
 
         if (row < 0) //top of the board, no moves to do
             return root;
-        if (col >= BOARD_SIZE - 1) {
-            right = board[row + 1][col + 1];
+        if (col < BOARD_SIZE - 1) {
+            right = board[row - 1][col + 1];
             copyBorad(board, copyBoardRight);
             //capture move for B
             if (right == PLAYER_T)
@@ -152,7 +152,7 @@ SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char p
                     //    copyBoard[nRow][nCol] = PLAYER_B; //moving 'T' 2 cols right 2 rows down
                     unsigned short tempCaptures = capturesSoFar;
                     captureMove(player, RIGHT, board, row, col, &nRow, &nCol, &tempCaptures, copyBoardRight);
-                    root->next_move[RIGHT] = buildTreeHelper(copyBoardRight, nRow, nRow, player, tempCaptures);
+                    root->next_move[RIGHT] = buildTreeHelper(copyBoardRight, nRow, nCol, player, tempCaptures);
                     //}
                     //else
                     //    root->next_move[RIGHT] = NULL;
@@ -171,7 +171,7 @@ SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char p
         }
         if (col > 0)
         {
-            left = board[row +1 ][col - 1];
+            left = board[row -1 ][col - 1];
             copyBorad(board, copyBoardLeft);
 
             if (left == PLAYER_T)
