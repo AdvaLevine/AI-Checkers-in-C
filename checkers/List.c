@@ -86,6 +86,16 @@ SingleSourceMovesListCell* getTail(SingleSourceMovesList* lst, unsigned short ca
 	}
 	return curr;
 }
+
+
+
+multipleSourceMoveList* FindAllPossiblePlayerMoves(Board board, Player player) {
+
+	//NOA'S FUNCTION :)
+
+
+
+}
 //void FindMaxRoute(SingleSourceMovesTreeNode* source, char player,unsigned short* capturesOfRoute) {
 //	unsigned short captureRouteLeft, captureRouteRight;
 //
@@ -134,6 +144,9 @@ insertDataToEndList(SingleSourceMovesList* lst, checkersPos* pos, unsigned short
 	insertListNodeToEndList(lst, newTail);
 }
 
+void makeEmptyMultipleList(multipleSourceMoveList* res) {
+	res->head = res->tail = NULL;
+}
 void makeEmptyList(SingleSourceMovesList* res) {
 	res->head = res->tail = NULL;
 }

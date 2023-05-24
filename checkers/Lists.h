@@ -14,6 +14,16 @@ typedef struct _SingleSourceMovesList {
 	SingleSourceMovesListCell *tail;
 }SingleSourceMovesList;
 
+typedef struct _multipleSourceMoveListCell {
+	SingleSourceMovesList* single_source_moves_lists;
+	struct _multipleSourceMoveListCell* next;
+}multipleSourceMoveListCell;
+
+typedef struct _multipleSourceMoveList {
+	multipleSourceMoveListCell* head;
+	multipleSourceMoveListCell* tail;
+}multipleSourceMoveList;
+
 //function
 SingleSourceMovesList* FindSingleSourceOptimalMove(SingleSourceMovesTree* moves_tree);
 void makeEmptyList(SingleSourceMovesList* res);
@@ -25,6 +35,6 @@ bool isEmpty(SingleSourceMovesList* list);
 SingleSourceMovesListCell* getTail(SingleSourceMovesList* lst, unsigned short captures);
 SingleSourceMovesListCell* createOptimalListFromTree(SingleSourceMovesTreeNode* source, char player, unsigned short* capturesOfRoute);
 void freeRoute(SingleSourceMovesListCell* route);
-
-
+void makeEmptyMultipleList(multipleSourceMoveList* res);
+multipleSourceMoveList* FindAllPossiblePlayerMoves(Board board, Player player);
 #endif //LIST_H

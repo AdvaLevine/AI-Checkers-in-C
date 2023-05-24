@@ -41,5 +41,6 @@ typedef unsigned char Player;
 //functions
 void createBoard(Board board);
 void copyBorad(Board board, Board copyBoard);
+void Turn(Board board, Player player);
 
 #endif //MAIN_H

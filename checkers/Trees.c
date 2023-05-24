@@ -352,9 +352,9 @@ void singleMove(SingleSourceMovesTreeNode* root, char player, int direction, Boa
         board[row][col] = EMPTY_POS; //changing current checkerPos
         board[*nRow][*nCol] = PLAYER_B; //moving 'B' left/right and up
         if (direction==RIGHT)
-            root->next_move[RIGHT] = createNewTNode(board, *nRow, *nCol, *capturesSoFar, NULL, NULL);
+            root->next_move[RIGHT] = createNewTNode(board, *nRow, *nCol, capturesSoFar, NULL, NULL);
         if(direction==LEFT)
-            root->next_move[LEFT] = createNewTNode(board, *nRow, *nCol, *capturesSoFar, NULL, NULL);
+            root->next_move[LEFT] = createNewTNode(board, *nRow, *nCol, capturesSoFar, NULL, NULL);
     }
 }
 
