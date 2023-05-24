@@ -17,7 +17,9 @@ SingleSourceMovesList* FindSingleSourceOptimalMove(SingleSourceMovesTree* moves_
 	res = (SingleSourceMovesList*)malloc(sizeof(SingleSourceMovesList));
 	checkAllocationList(res);
 	/*makeEmptyList(&res);*/
-	FindMaxRoute(moves_tree->source,player,&capturesOfRoute);
+	
+	res->head = createOptimalListFromTree(moves_tree->source, player, &capturesOfRoute);
+	res->tail = getTail(res, capturesOfRoute);
 
 	//maxRouteList(res,capturesOfRoute,arr)
 	
@@ -25,47 +27,106 @@ SingleSourceMovesList* FindSingleSourceOptimalMove(SingleSourceMovesTree* moves_
 	return res;
 }
 
-void FindMaxRoute(SingleSourceMovesTreeNode* source, char player,unsigned short* capturesOfRoute) {
+SingleSourceMovesListCell* createOptimalListFromTree(SingleSourceMovesTreeNode* source, char player, unsigned short* capturesOfRoute)
+{
 	unsigned short captureRouteLeft, captureRouteRight;
-
+	SingleSourceMovesListCell* root; //change to node
+	SingleSourceMovesListCell* leftListNode;
+	SingleSourceMovesListCell* rightListNode;
 	if (source == NULL) {//if empty tree return
 		*capturesOfRoute = 0;
-		return;
+		return NULL;
 	}
+	root = createNewListCell(source->pos, source->total_captures_so_far, NULL);
 	//if its a leaf, we return the capture move in it
-	else if ((source->next_move[LEFT] == NULL) && (source->next_move[RIGHT] == NULL)) {
+	if ((source->next_move[LEFT] == NULL) && (source->next_move[RIGHT] == NULL)) {
 		*capturesOfRoute = source->total_captures_so_far;
-		return;
+		return root;
 	}
-	//create list node
-	//adding the col to compare later to get the best route
-	//colsArr[level] = (source->pos->col)-CHAR_0;
-
-	FindMaxRoute(source->next_move[LEFT], player,&captureRouteLeft);
-	FindMaxRoute(source->next_move[RIGHT], player,&captureRouteRight);
 	
+	leftListNode = createOptimalListFromTree(source->next_move[LEFT], player, &captureRouteLeft);
+	rightListNode = createOptimalListFromTree(source->next_move[RIGHT], player, &captureRouteRight);
+
 	if (captureRouteRight == captureRouteLeft) {//same number of captures
 		//rule in page 2
 		if (player == PLAYER_T) {
-		
+			root->next = rightListNode;
+			freeRoute(leftListNode); //free the left route
 		}
 		else {//player is B
-			
+			root->next = leftListNode;
+			freeRoute(rightListNode); //free the right route
 		}
 		*capturesOfRoute = captureRouteRight;//return the max number of capture(they are equal)
 	}
 	//if the captures on the right are more than on left
 	else if (captureRouteRight > captureRouteLeft) {
-
+		root->next = rightListNode;
 		*capturesOfRoute = captureRouteRight;
-	
+		freeRoute(leftListNode); //free the left route
+
 	}
 	else {//if the captures on the left are more than on right
+		root->next = leftListNode;
 		*capturesOfRoute = captureRouteLeft;
-		
-	}
+		freeRoute(rightListNode); //free the left route
 
+	}
+	return root;
 }
+
+SingleSourceMovesListCell* getTail(SingleSourceMovesList* lst, unsigned short captures)
+{
+	SingleSourceMovesListCell* curr;
+	curr = lst->head;
+	while (curr !=NULL && captures>0)
+	{
+		curr = curr->next;
+		captures--;
+	}
+	return curr;
+}
+//void FindMaxRoute(SingleSourceMovesTreeNode* source, char player,unsigned short* capturesOfRoute) {
+//	unsigned short captureRouteLeft, captureRouteRight;
+//
+//	if (source == NULL) {//if empty tree return
+//		*capturesOfRoute = 0;
+//		return;
+//	}
+	//if its a leaf, we return the capture move in it
+	//else if ((source->next_move[LEFT] == NULL) && (source->next_move[RIGHT] == NULL)) {
+	//	*capturesOfRoute = source->total_captures_so_far;
+	//	return;
+	//}
+//	//create list node
+//	//adding the col to compare later to get the best route
+//	//colsArr[level] = (source->pos->col)-CHAR_0;
+//
+//	FindMaxRoute(source->next_move[LEFT], player,&captureRouteLeft);
+//	FindMaxRoute(source->next_move[RIGHT], player,&captureRouteRight);
+//	
+	//if (captureRouteRight == captureRouteLeft) {//same number of captures
+	//	//rule in page 2
+	//	if (player == PLAYER_T) {
+	//	
+	//	}
+	//	else {//player is B
+	//		
+	//	}
+	//	*capturesOfRoute = captureRouteRight;//return the max number of capture(they are equal)
+	//}
+	//if the captures on the right are more than on left
+	//else if (captureRouteRight > captureRouteLeft) {
+
+	//	*capturesOfRoute = captureRouteRight;
+	//
+	//}
+	//else {//if the captures on the left are more than on right
+	//	*capturesOfRoute = captureRouteLeft;
+	//	
+	//}
+//
+//}
 
 insertDataToEndList(SingleSourceMovesList* lst, checkersPos* pos, unsigned short captures) {
 	SingleSourceMovesListCell* newTail;
@@ -120,4 +181,17 @@ bool isEmpty(SingleSourceMovesList* list) {
 		return true;
 	else
 		return false;
+}
+
+void freeRoute(SingleSourceMovesListCell* route)
+{
+	SingleSourceMovesListCell* curr, * next;
+	curr = route; 
+	next = NULL;
+	while (curr!=NULL)
+	{
+		next = curr->next;
+		free(curr);
+		curr = next;
+	}
 }

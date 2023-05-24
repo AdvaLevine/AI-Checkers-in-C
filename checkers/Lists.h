@@ -19,10 +19,12 @@ SingleSourceMovesList* FindSingleSourceOptimalMove(SingleSourceMovesTree* moves_
 void makeEmptyList(SingleSourceMovesList* res);
 void checkAllocationList(SingleSourceMovesList* res);
 void checkAllocationListNode(SingleSourceMovesListCell* res);
-void FindMaxRoute(SingleSourceMovesTreeNode* source, char player, unsigned short* capturesOfRoute,
-	int arr[],int size, int level);
 SingleSourceMovesListCell* createNewListCell(checkersPos* pos, unsigned short captures, SingleSourceMovesListCell* next);
 void insertListNodeToEndList(SingleSourceMovesList* list, SingleSourceMovesListCell* res);
 bool isEmpty(SingleSourceMovesList* list);
+SingleSourceMovesListCell* getTail(SingleSourceMovesList* lst, unsigned short captures);
+SingleSourceMovesListCell* createOptimalListFromTree(SingleSourceMovesTreeNode* source, char player, unsigned short* capturesOfRoute);
+void freeRoute(SingleSourceMovesListCell* route);
+
 
 #endif //LIST_H
