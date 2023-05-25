@@ -42,5 +42,8 @@ typedef unsigned char Player;
 void createBoard(Board board);
 void copyBorad(Board board, Board copyBoard);
 void Turn(Board board, Player player);
+void updateBoard(Board board, Player player, multipleSourceMoveListCell* optimal, unsigned short maxCaptures);
+void updateNumOfPlayers(unsigned short maxCaptures, Player player, int* numOfBPlayers, int* numOfTPlayers);
+
 
 #endif //MAIN_H
