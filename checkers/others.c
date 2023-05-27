@@ -68,20 +68,174 @@ void copyBorad(Board board, Board copyBoard)
         }
     }
 }
-//void Turn(Board board, Player player) {
-//
-//    int numOfTPlayers = 12;
-//    int numOfBPlayers = 12;
-//    unsigned short maxCaptures=0;
-//    multipleSourceMoveList* res;//create the list of lists
-//    res = (multipleSourceMoveList*)malloc(sizeof(multipleSourceMoveList));
-//    if (res == NULL) {
-//        exit(1);
-//    }
-//
-//    makeEmptyMultipleList(res);//initilize list of lists
-//    res = FindAllPossiblePlayerMoves(board, player);//get the list of lists 
-//
+void Turn(Board board, Player player) {
+
+    //checking if we can still continue in the game
+    if (isGameFinished(board, player)) {
+        return;//game finished
+    }
+
+    //game continues
+    unsigned short maxCaptures = -1;
+    int chosenMoveIndex = -1; //chosen list move
+    int i;
+    int count = 0;
+    multipleSourceMoveList* res;//create the list of lists
+    res = (multipleSourceMoveList*)malloc(sizeof(multipleSourceMoveList));
+    if (res == NULL) {
+        printf("Error! Failed to allocate memory\n");
+        exit(1);
+    }
+
+    makeEmptyMultipleList(res);//initilize list of lists
+    res = FindAllPossiblePlayerMoves(board, player);//get the list of lists
+
+    //find the num of lists in the list of lists
+    multipleSourceMoveListCell* curr=res->head;
+    while (curr != NULL) {
+        count++;
+        curr = curr->next;
+    }
+    //if theres only one list return it
+    if (count == 1) {
+        chosenMoveIndex = 0;
+        SingleSourceMovesList* chosenMove =res->head;
+        makeMove(board, chosenMove); //change the board
+    }
+    //more then one list
+    else {
+
+        //checking if theres a max capture move
+        for (i = 0; i < count; i++) {
+            SingleSourceMovesList* currentMove = res->head->single_source_moves_lists;
+        //checking the captures in the tail to see if its the maximum
+            if (currentMove->tail->captures > maxCaptures) {
+                maxCaptures = currentMove->tail->captures;
+                chosenMoveIndex = i;//found the best move list
+            }
+            res = res->head->next;
+        }
+        if (chosenMoveIndex != -1) {
+            SingleSourceMovesList* chosenMove = SingleSourceMovesListByIndex(res, chosenMoveIndex);
+            makeMove(board, chosenMove); //change the board
+        }
+    }
+    //left to do-
+        // חישוב השורה והעמודה הגבוהות או הנמוכות ביותר במסלולים האופטימליים
+    //אם אין קאפצרים מקסימלים
+
+
+
+    //free
+    RemoveSingleSourceMovesList(res);
+}
+//function to check if the game is finished
+int isGameFinished(Board board, Player player) {
+    int i, j;
+    int playerBPieces = 0;
+    int playerTPieces = 0;
+
+   //counting the players tools 
+    for (i = 0; i < BOARD_SIZE; i++) {
+        for (j = 0; j < BOARD_SIZE; j++) {
+            if (board[i][j] == player) {
+                playerTPieces++;
+            }
+            else if (board[i][j] != ' ') {
+                playerBPieces++;
+            }
+        }
+    }
+
+//checking if everyone still has game pieces
+    if (playerBPieces == 0 || playerTPieces == 0) {
+        return 1;  //game over
+    }
+
+//checking if player B is in the first row
+    if (player == 'B') {
+        for (i = 0; i < BOARD_SIZE; i++) {
+            if (board[0][i] == player) {
+                return 1; //B won-game over
+            }
+        }
+    }
+    //checking if player T is in the last row
+    else if (player == 'T') {
+        for (i = 0; i < BOARD_SIZE; i++) {
+            if (board[BOARD_SIZE - 1][i] == player) {
+                return 1; //T won-game over
+            }
+        }
+    }
+
+    return 0; //game ont over yet
+}
+//gets the index for where the list is and then looks out for the list in the lists of mult lists
+SingleSourceMovesList* getSingleSourceMovesListByIndex(multipleSourceMoveList* list, int index) {
+
+    multipleSourceMoveListCell* currentCell = list->head;
+    int currentIndex = 0;
+
+    //looking for the list of the best move (we found the index in Turn func
+    while (currentCell != NULL && currentIndex < index) {
+        currentCell = currentCell->next;
+        currentIndex++;
+    }
+    //if thr cell isnt empty
+    if (currentCell != NULL) {
+        return currentCell->single_source_moves_lists;
+    }
+
+    return NULL; //index not found
+
+}
+//change the board
+void makeMove(Board board, SingleSourceMovesList* move) {
+   
+    //moving the player from the stating point to end point and making the starting point empty
+    board[move->tail->position->row][move->tail->position->col] = board[move->head->position->row][move->head->position->col];
+    board[move->head->position->row][move->head->position->col] = EMPTY_POS;
+
+    //checking for any capture moves if so, makes empty where it captures 
+    if (move->tail->captures != 0) {
+        SingleSourceMovesListCell* currentPos = move->head->next;
+        while (currentPos != NULL) {
+            board[currentPos->position->row][currentPos->position->col] = EMPTY_POS;
+            currentPos = currentPos->next;
+        }
+    }
+}
+//free func
+void RemoveSingleSourceMovesList(multipleSourceMoveList* list) {
+
+    multipleSourceMoveListCell* largeList = list->head;
+    multipleSourceMoveListCell* nextLargeList;
+    SingleSourceMovesList* smallList;
+    SingleSourceMovesListCell* curr;
+    SingleSourceMovesListCell* nextMove;
+
+
+    while (largeList != NULL) {
+        smallList = largeList->single_source_moves_lists;
+        nextLargeList = largeList->next;
+        curr = smallList->head;
+
+        while (curr != NULL) {
+            nextMove = curr->next;
+            free(curr->position->row);
+            free(curr->position->col);
+            free(curr->position);
+            free(curr);
+            curr = nextMove;
+        }
+        free(largeList);
+        largeList = nextLargeList;
+    }
+
+}
+
+
 //    multipleSourceMoveListCell* curr=NULL;
 //    multipleSourceMoveListCell* optimal = NULL;
 //    curr = res->head;
@@ -90,15 +244,23 @@ void copyBorad(Board board, Board copyBoard)
 //    while (curr != NULL) {
 //        //player T turn
 //        if (player == PLAYER_T) {
-//            //last move- if the number of captures is the same as the nember of players- T wins
+//            //last move- if the number of captures is the same as the number of players- T wins
 //            if (curr->single_source_moves_lists->tail->captures == numOfBPlayers){
 //                optimal = curr->single_source_moves_lists->head;//found the best move
 //            }
-//            //last move- if the T player is one list of finishing the  game
+//            //last move- if the T player is one move of finishing the game
 //            else if (curr->single_source_moves_lists->tail->position->row == BOARD_SIZE - 1) {
 //                optimal = curr->single_source_moves_lists->head;//found the best move
 //            }
-//            //max captures or exercise 4 law
+//            //max captures 
+//            else if (curr->single_source_moves_lists->tail->captures > maxCaptures) {
+//                maxCaptures = curr->single_source_moves_lists->tail->captures;
+//                optimal = curr->single_source_moves_lists->head;//found the best move
+//            }
+//            // law 4
+//            else {
+//              
+//            }
 //        }
 //        else {//player is B
 //
@@ -107,11 +269,11 @@ void copyBorad(Board board, Board copyBoard)
 //    }
 //
 //    //update the board
-//    updateBoard(board, player, optimal, maxCaptures);
+//    //updateBoard(board, player, optimal, maxCaptures);
 //
 //    //update the number of players
 //    if (maxCaptures > 0) {
-//        updateNumOfPlayers(maxCaptures, player, &numOfBPlayers, &numOfTPlayers);
+//        //updateNumOfPlayers(maxCaptures, player, &numOfBPlayers, &numOfTPlayers);
 //    }
 //   
 //

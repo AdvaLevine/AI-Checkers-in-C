@@ -185,7 +185,7 @@ checkersPos* createPos(int row, int col)
 	return pos;
 }
 
-insertDataToEndList(SingleSourceMovesList* lst, checkersPos* pos, unsigned short captures) {
+void insertDataToEndList(SingleSourceMovesList* lst, checkersPos* pos, unsigned short captures) {
 	SingleSourceMovesListCell* newTail;
 	newTail = createNewListCell(pos,captures, NULL);
 	insertListNodeToEndList(lst, newTail);

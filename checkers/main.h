@@ -42,9 +42,15 @@ typedef unsigned char Player;
 void createBoard(Board board);
 void copyBorad(Board board, Board copyBoard);
 checkersPos* createPos(int row, int col);
-//void Turn(Board board, Player player);
+void Turn(Board board, Player player);
+int isGameFinished(Board board, Player player);
+
+//lists?
+SingleSourceMovesList* getSingleSourceMovesListByIndex(multipleSourceMoveList* list, int index);
+void RemoveSingleSourceMovesList(multipleSourceMoveList* list);
+
 //void updateBoard(Board board, Player player, multipleSourceMoveListCell* optimal, unsigned short maxCaptures);
 //void updateNumOfPlayers(unsigned short maxCaptures, Player player, int* numOfBPlayers, int* numOfTPlayers);
-
+//
 
 #endif //MAIN_H

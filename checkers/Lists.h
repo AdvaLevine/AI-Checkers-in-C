@@ -31,6 +31,7 @@ void checkAllocationList(SingleSourceMovesList* res);
 void checkAllocationListNode(SingleSourceMovesListCell* res);
 void checkAllocationMultipleList(multipleSourceMoveList* res);
 SingleSourceMovesListCell* createNewListCell(checkersPos* pos, unsigned short captures, SingleSourceMovesListCell* next);
+void insertDataToEndList(SingleSourceMovesList* lst, checkersPos* pos, unsigned short captures);
 void insertListNodeToEndList(SingleSourceMovesList* list, SingleSourceMovesListCell* res);
 bool isEmpty(SingleSourceMovesList* list);
 SingleSourceMovesListCell* getTail(SingleSourceMovesList* lst, unsigned short captures);
