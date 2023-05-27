@@ -29,6 +29,7 @@ SingleSourceMovesList* FindSingleSourceOptimalMove(SingleSourceMovesTree* moves_
 void makeEmptyList(SingleSourceMovesList* res);
 void checkAllocationList(SingleSourceMovesList* res);
 void checkAllocationListNode(SingleSourceMovesListCell* res);
+void checkAllocationMultipleList(multipleSourceMoveList* res);
 SingleSourceMovesListCell* createNewListCell(checkersPos* pos, unsigned short captures, SingleSourceMovesListCell* next);
 void insertListNodeToEndList(SingleSourceMovesList* list, SingleSourceMovesListCell* res);
 bool isEmpty(SingleSourceMovesList* list);
@@ -37,4 +38,5 @@ SingleSourceMovesListCell* createOptimalListFromTree(SingleSourceMovesTreeNode* 
 void freeRoute(SingleSourceMovesListCell* route);
 void makeEmptyMultipleList(multipleSourceMoveList* res);
 multipleSourceMoveList* FindAllPossiblePlayerMoves(Board board, Player player);
+void insertListToEndMultiplefList(multipleSourceMoveList* multipleList, multipleSourceMoveListCell* newList);
 #endif //LIST_H

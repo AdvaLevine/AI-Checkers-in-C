@@ -5,15 +5,26 @@
 //main function
 void main()
 {
- 
-   /* Board board = { {0,0,0,0,0,0,0,0},
-                     {0,0,0,0,0,0,0,0},
-                     {0,0,0,0,0,0,0,0},
-                     {0,0,0,0,0,0,0,0},
-                     {0,0,0,'T',0,'T',0,0},
-                     {0,0,0,0,0,0,0,0},
-                     {0,0,0,'T',0,'T',0,0},
-                     {0,0,0,0,'B',0,0,0} };*/
+    multipleSourceMoveList* res;
+    //Board board = { {0,0,0,0,0,0,0,0},
+    //                 {0,0,0,0,0,0,0,0},
+    //                 {0,0,0,0,0,0,0,0},
+    //                 {0,0,0,0,0,0,0,0},
+    //                 {0,0,0,'T',0,'T',0,0},
+    //                 {0,0,0,0,0,0,0,0},
+    //                 {0,0,0,'T',0,'T',0,0},
+    //                 {0,0,0,0,'B',0,0,0} };
+    //checkersPos pos = { 'H',5 }; //testing
+
+    //Board board = { {0,0,0,0,0,0,0,0},
+    //                 {0,0,0,0,0,0,0,0},
+    //                 {0,0,0,'T',0,'T',0,0},
+    //                 {0,0,0,0,0,0,0,0},
+    //                 {0,0,0,'T',0,'T',0,0},
+    //                 {0,0,0,0,0,0,0,0},
+    //                 {0,0,0,'T',0,'T',0,0},
+    //                 {0,0,0,0,'B',0,0,0} };
+    //checkersPos pos = { 'H',5 }; //testing
    
     Board board = { {0,0,0,'T',0,0,0,0},
                     {0,0,'B',0,'B',0,0,0},
@@ -23,6 +34,7 @@ void main()
                     {0,0,0,0,0,0,0,0},
                     {0,0,0,0,0,0,0,0},
                     {0,0,0,0,0,0,0,0} };
+    //checkersPos pos = { 'A',4 }; //testing
 
     /*Board board = { {0,0,0,'T',0,0,0,0},
                     {0,0,'B',0,'B',0,0,0},
@@ -35,13 +47,13 @@ void main()
     //Board board;
     //createBoard(board);
     SingleSourceMovesTree* TreeOfSingleMove;
-    checkersPos pos = {'A',4 }; //testing
+
     SingleSourceMovesList* list;
 
-    TreeOfSingleMove = FindSingleSourceMoves(board, &pos);
+    //TreeOfSingleMove = FindSingleSourceMoves(board, &pos);
 
-    list = FindSingleSourceOptimalMove(TreeOfSingleMove);
-
+    //list = FindSingleSourceOptimalMove(TreeOfSingleMove);
+    res = FindAllPossiblePlayerMoves(board, 'B');
 
     //free if needed
     //free treeNodes and free tree source-> free insdie treenode- checkerspos

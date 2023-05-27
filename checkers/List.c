@@ -89,12 +89,34 @@ SingleSourceMovesListCell* getTail(SingleSourceMovesList* lst, unsigned short ca
 
 
 
-multipleSourceMoveList* FindAllPossiblePlayerMoves(Board board, Player player) {
+multipleSourceMoveList* FindAllPossiblePlayerMoves(Board board, Player player)
+{
+	multipleSourceMoveList* res;
+	multipleSourceMoveListCell* tmpListCell;
+	SingleSourceMovesTree* tmpTree;
+	checkersPos* tmpPos;
+	//SingleSourceMovesList* tmpList;
+	int i, j;
+	res = (multipleSourceMoveList*)malloc(sizeof(multipleSourceMoveList));
+	checkAllocationMultipleList(res);
+	makeEmptyMultipleList(res);
 
-	//NOA'S FUNCTION :)
-
-
-
+	for (i = 0; i < BOARD_SIZE; i++)
+	{
+		for (j = 0; j < BOARD_SIZE; j++)
+		{
+			if (board[i][j] == player)
+			{
+				tmpPos = createPos(i, j);
+				tmpTree = FindSingleSourceMoves(board, tmpPos);
+				tmpListCell = (multipleSourceMoveListCell*)malloc(sizeof(multipleSourceMoveListCell));
+				checkAllocationListNode(tmpListCell);
+				tmpListCell->single_source_moves_lists =FindSingleSourceOptimalMove(tmpTree);
+				insertListToEndMultiplefList(res, tmpListCell);
+			}
+		}
+	}
+	return res;
 }
 //void FindMaxRoute(SingleSourceMovesTreeNode* source, char player,unsigned short* capturesOfRoute) {
 //	unsigned short captureRouteLeft, captureRouteRight;
@@ -127,7 +149,19 @@ multipleSourceMoveList* FindAllPossiblePlayerMoves(Board board, Player player) {
 	//}
 	//if the captures on the right are more than on left
 	//else if (captureRouteRight > captureRouteLeft) {
+void insertListToEndMultiplefList(multipleSourceMoveList* multipleList, multipleSourceMoveListCell* newList)
+{
+	if (multipleList->head == NULL)
+		multipleList->head = multipleList->tail = newList;
 
+	else
+	{
+		multipleList->tail->next = newList;
+		multipleList->tail = newList;
+	}
+
+	newList->next = NULL;
+}
 	//	*capturesOfRoute = captureRouteRight;
 	//
 	//}
@@ -137,6 +171,19 @@ multipleSourceMoveList* FindAllPossiblePlayerMoves(Board board, Player player) {
 	//}
 //
 //}
+checkersPos* createPos(int row, int col)
+{
+	checkersPos* pos;
+	pos = (checkersPos*)malloc(sizeof(checkersPos));
+	if (pos == NULL)
+	{
+		printf("Error! Failed to allocate memory\n");
+		exit(1);
+	}
+	pos->col = CHAR_0 + col + 1;
+	pos->row = CHAR_A + row;
+	return pos;
+}
 
 insertDataToEndList(SingleSourceMovesList* lst, checkersPos* pos, unsigned short captures) {
 	SingleSourceMovesListCell* newTail;
@@ -158,7 +205,13 @@ void checkAllocationList(SingleSourceMovesList* res) {
 		exit(1);
 	}
 }
-
+void checkAllocationMultipleList(multipleSourceMoveList* res) {
+	if (res == NULL)
+	{
+		printf("Error! Failed to allocate memory\n");
+		exit(1);
+	}
+}
 void checkAllocationListNode(SingleSourceMovesListCell* res) {
 	if (res == NULL)
 	{
