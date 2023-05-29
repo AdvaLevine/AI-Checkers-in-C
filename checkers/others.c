@@ -3,8 +3,6 @@
 
 
 
-
-
 //function to create the board
 void createBoard(Board board) {
 
@@ -76,10 +74,22 @@ void Turn(Board board, Player player) {
     }
 
     //game continues
-    unsigned short maxCaptures = -1;
+    unsigned short maxCaptures = 0;
     int chosenMoveIndex = -1; //chosen list move
-    int i;
     int count = 0;
+    int i=0;
+    //find max and min cols and rows
+    int minRow = BOARD_SIZE;//size that doesnt exist in board
+    int minCol = BOARD_SIZE;//size that doesnt exist in board
+    int maxRow = -1;//size that doesnt exist in board
+    int maxCol = -1;//size that doesnt exist in board
+    SingleSourceMovesList* currentMove = NULL;//current place in single list
+    SingleSourceMovesList* chosenMove = NULL;//the list of moves wee choose
+    multipleSourceMoveListCell* numOfListsCurr = NULL;//number of list curr
+    multipleSourceMoveListCell* currentListCell=NULL;
+    int currentIndex = 0;
+
+
     multipleSourceMoveList* res;//create the list of lists
     res = (multipleSourceMoveList*)malloc(sizeof(multipleSourceMoveList));
     if (res == NULL) {
@@ -91,41 +101,116 @@ void Turn(Board board, Player player) {
     res = FindAllPossiblePlayerMoves(board, player);//get the list of lists
 
     //find the num of lists in the list of lists
-    multipleSourceMoveListCell* curr=res->head;
-    while (curr != NULL) {
+    numOfListsCurr=res->head;
+    while (numOfListsCurr != NULL) {
         count++;
-        curr = curr->next;
+        numOfListsCurr = numOfListsCurr->next;
     }
     //if theres only one list return it
     if (count == 1) {
         chosenMoveIndex = 0;
-        SingleSourceMovesList* chosenMove =res->head;
-        makeMove(board, chosenMove); //change the board
+        chosenMove =res->head->single_source_moves_lists;
+        makeMove(board, chosenMove,player); //change the board
     }
     //more then one list
     else {
 
         //checking if theres a max capture move
-        for (i = 0; i < count; i++) {
-            SingleSourceMovesList* currentMove = res->head->single_source_moves_lists;
-        //checking the captures in the tail to see if its the maximum
-            if (currentMove->tail->captures > maxCaptures) {
-                maxCaptures = currentMove->tail->captures;
-                chosenMoveIndex = i;//found the best move list
+        //for (i = 0; i < count; i++) {
+
+        //    currentMove = res->head->single_source_moves_lists;
+        ////checking the captures in the tail to see if its the maximum
+        //    if (currentMove->tail->captures > maxCaptures) {
+        //        maxCaptures = currentMove->tail->captures;
+        //        chosenMoveIndex = i;//found the best move list
+        //    }
+        //    res = res-next;
+        //}
+        currentListCell = res->head;
+        while (currentListCell != NULL) {
+            currentMove = currentListCell->single_source_moves_lists;
+            //checking the captures in the tail to see if it's the maximum
+            if (currentMove->tail != NULL) {
+                if (currentMove->tail->captures > maxCaptures) {
+                    maxCaptures = currentMove->tail->captures;
+                    chosenMoveIndex = currentIndex; //found the best move list
+                }
             }
-            res = res->head->next;
+            currentListCell = currentListCell->next;
+            currentIndex++;
         }
         if (chosenMoveIndex != -1) {
-            SingleSourceMovesList* chosenMove = SingleSourceMovesListByIndex(res, chosenMoveIndex);
-            makeMove(board, chosenMove); //change the board
+            chosenMove = getSingleSourceMovesListByIndex(res, chosenMoveIndex);
+            makeMove(board, chosenMove,player); //change the board
         }
-    }
-    //left to do-
-        // חישוב השורה והעמודה הגבוהות או הנמוכות ביותר במסלולים האופטימליים
-    //אם אין קאפצרים מקסימלים
+        else//there wasnt a max capture move- we'll use rule number 4
+        {
+            //looking for the min and max rows and cols so we can choose the best move
+            currentListCell = res->head;
 
+            while (currentListCell != NULL) {//as long as we have lists
+                currentMove = currentListCell->single_source_moves_lists;
+                if ((currentMove->tail->position->row)-CHAR_A < minRow)//if its a smaller row
+                    minRow = (currentMove->tail->position->row)-CHAR_A;//update min row
 
+                if ((currentMove->tail->position->row)-CHAR_A > maxRow)//if its a higer row
+                    maxRow = (currentMove->tail->position->row)-CHAR_A;//update high row
 
+                if ((currentMove->tail->position->col)-CHAR_0 < minCol)//if its a smaller col
+                    minCol = (currentMove->tail->position->col)-CHAR_0;//update min col
+
+                if ((currentMove->tail->position->col)-CHAR_0 > maxCol)//if its a max col
+                    maxCol = (currentMove->tail->position->col)-CHAR_0;//update max col
+
+                //go to the next list
+                currentListCell = currentListCell->next;
+            }
+
+            //currentMove = res->head->single_source_moves_lists;//first list of moves
+            currentListCell = res->head;
+            bool bestMove = false;//boolian for checking if best move was found
+
+            //rule in exercise 4- when theres no max number of captures
+            while (currentListCell != NULL && !bestMove) {//looking for the best move  
+                currentMove = currentListCell->single_source_moves_lists;
+            //if its player B we choose lowest row and then if there are equal rows then lowest cols
+                if (player == PLAYER_B) {
+                    if ((currentMove->tail->position->row) - CHAR_A == minRow && (currentMove->tail->position->col) - CHAR_0 < minCol) {
+                        bestMove = true;//found best move
+                    }
+                    else if ((currentMove->tail->position->row) - CHAR_A == minRow) {
+                        bestMove = true;//found best move
+                    }
+                
+                }
+            //if its player T we choose highest row and then if there are equal rows then highest cols
+                else if (player == PLAYER_T) {
+                
+                    if ((currentMove->tail->position->row)-CHAR_A == maxRow && (currentMove->tail->position->col)-CHAR_0 > maxCol) {
+                        bestMove = true;//found best move
+                    }
+                    else if ((currentMove->tail->position->row)-CHAR_A == maxRow) {
+                        bestMove = true;//found best move
+                    }
+                }
+                //found best move=>update the list to be the list we just found
+                if (bestMove) {
+                    chosenMove = currentMove;
+                }
+                else {
+                    //next list
+                    currentListCell = currentListCell->next;
+                }
+            }//while
+
+            //do the best move
+                if (bestMove != NULL) {
+                     makeMove(board,chosenMove ,player);
+                }
+
+        }//else no large captures
+    }//else more than 1 list
+    
     //free
     RemoveSingleSourceMovesList(res);
 }
@@ -153,7 +238,7 @@ int isGameFinished(Board board, Player player) {
     }
 
 //checking if player B is in the first row
-    if (player == 'B') {
+    if (player == PLAYER_B) {
         for (i = 0; i < BOARD_SIZE; i++) {
             if (board[0][i] == player) {
                 return 1; //B won-game over
@@ -161,7 +246,7 @@ int isGameFinished(Board board, Player player) {
         }
     }
     //checking if player T is in the last row
-    else if (player == 'T') {
+    else if (player == PLAYER_T) {
         for (i = 0; i < BOARD_SIZE; i++) {
             if (board[BOARD_SIZE - 1][i] == player) {
                 return 1; //T won-game over
@@ -191,17 +276,35 @@ SingleSourceMovesList* getSingleSourceMovesListByIndex(multipleSourceMoveList* l
 
 }
 //change the board
-void makeMove(Board board, SingleSourceMovesList* move) {
+void makeMove(Board board, SingleSourceMovesList* move, Player player) {
    
     //moving the player from the stating point to end point and making the starting point empty
-    board[move->tail->position->row][move->tail->position->col] = board[move->head->position->row][move->head->position->col];
-    board[move->head->position->row][move->head->position->col] = EMPTY_POS;
-
-    //checking for any capture moves if so, makes empty where it captures 
+    int col = (move->head->position->col) - CHAR_0 - 1;
+    int row = (move->head->position->row) - CHAR_A;
+    board[(move->tail->position->row)-CHAR_A][(move->tail->position->col)-CHAR_0-1] = board[(move->head->position->row)-CHAR_A][(move->head->position->col)-CHAR_0-1];
+    board[(move->head->position->row) - CHAR_A][(move->head->position->col) - CHAR_0 - 1] = EMPTY_POS;
+    
+    // Checking for any capture moves and removing the captured positions
     if (move->tail->captures != 0) {
         SingleSourceMovesListCell* currentPos = move->head->next;
         while (currentPos != NULL) {
-            board[currentPos->position->row][currentPos->position->col] = EMPTY_POS;
+            int captureRow = (currentPos->position->row) - CHAR_A;
+            int captureCol = (currentPos->position->col) - CHAR_0 - 1;
+
+            if (player == PLAYER_T) {
+                if (col < captureCol)
+                    board[captureRow - 1][captureCol - 1] = EMPTY_POS;
+                else if (col > captureCol)
+                    board[captureRow - 1][captureCol + 1] = EMPTY_POS;
+            }
+            else if (player == PLAYER_B) {
+                if (col < captureCol)
+                    board[captureRow + 1][captureCol - 1] = EMPTY_POS;
+                else if (col > captureCol)
+                    board[captureRow + 1][captureCol + 1] = EMPTY_POS;
+            }
+            col = captureCol;
+            row = captureRow;
             currentPos = currentPos->next;
         }
     }
@@ -223,8 +326,6 @@ void RemoveSingleSourceMovesList(multipleSourceMoveList* list) {
 
         while (curr != NULL) {
             nextMove = curr->next;
-            free(curr->position->row);
-            free(curr->position->col);
             free(curr->position);
             free(curr);
             curr = nextMove;
@@ -235,116 +336,3 @@ void RemoveSingleSourceMovesList(multipleSourceMoveList* list) {
 
 }
 
-
-//    multipleSourceMoveListCell* curr=NULL;
-//    multipleSourceMoveListCell* optimal = NULL;
-//    curr = res->head;
-//
-//    //looking for the most optimal list from them all
-//    while (curr != NULL) {
-//        //player T turn
-//        if (player == PLAYER_T) {
-//            //last move- if the number of captures is the same as the number of players- T wins
-//            if (curr->single_source_moves_lists->tail->captures == numOfBPlayers){
-//                optimal = curr->single_source_moves_lists->head;//found the best move
-//            }
-//            //last move- if the T player is one move of finishing the game
-//            else if (curr->single_source_moves_lists->tail->position->row == BOARD_SIZE - 1) {
-//                optimal = curr->single_source_moves_lists->head;//found the best move
-//            }
-//            //max captures 
-//            else if (curr->single_source_moves_lists->tail->captures > maxCaptures) {
-//                maxCaptures = curr->single_source_moves_lists->tail->captures;
-//                optimal = curr->single_source_moves_lists->head;//found the best move
-//            }
-//            // law 4
-//            else {
-//              
-//            }
-//        }
-//        else {//player is B
-//
-//        }
-//        curr = curr->next;
-//    }
-//
-//    //update the board
-//    //updateBoard(board, player, optimal, maxCaptures);
-//
-//    //update the number of players
-//    if (maxCaptures > 0) {
-//        //updateNumOfPlayers(maxCaptures, player, &numOfBPlayers, &numOfTPlayers);
-//    }
-//   
-//
-//   
-//    free(curr);
-//    free(optimal);
-//    //free lists?
-//}
-//void updateBoard(Board board, Player player, multipleSourceMoveListCell* optimal, unsigned short maxCaptures) {
-//    int nRow = 0;
-//    int nCol = 0;
-//    int oldRow = 0, oldCol = 0;
-//
-//    //initilize the rows to the position
-//    oldRow = optimal->single_source_moves_lists->head->position->row - CHAR_A;
-//    oldCol = optimal->single_source_moves_lists->head->position->col - CHAR_A;
-//
-//    //update the board according to the chosen optimal move
-//    while (optimal != NULL) {
-//        //initilize the new row and col to the list of moves to the next move
-//        nRow = optimal->single_source_moves_lists->head->next->position->row - CHAR_A;
-//        nCol = optimal->single_source_moves_lists->head->next->position->col - CHAR_A;
-//        //need to check if its corerect because might not exist
-//
-//        //single move
-//        if (maxCaptures == 0) {
-//            board[oldRow][oldCol] = EMPTY_POS;//remove the old position
-//            board[nRow][nCol] = player;//update the new position
-//        }
-//
-//        //if we had a capture move
-//        else//captures>0
-//        {
-//            if (player == PLAYER_T) {
-//                if (oldCol < nCol) {//we moved right
-//                    board[oldRow][oldCol] = EMPTY_POS;//remove the old position
-//                    board[nRow - 1][nCol - 1] = EMPTY_POS;//remove the enemies player
-//                    board[nRow][nCol] = player;//update the new position on board
-//                }
-//                else {//oldCol>ncol meaning moved left
-//                    board[oldRow][oldCol] = EMPTY_POS;//remove the old position
-//                    board[nRow - 1][nCol + 1] = EMPTY_POS;//remove the enemies player
-//                    board[nRow][nCol] = player;//update the new position on board
-//                }
-//            }
-//            else {//if (player==PLAYER_B
-//                if (oldCol < nCol) {//we moved right
-//                    board[oldRow][oldCol] = EMPTY_POS;//remove the old position
-//                    board[nRow + 1][nCol - 1] = EMPTY_POS;//remove the enemies player
-//                    board[nRow][nCol] = player;//update the new position on board
-//                }
-//                else {//oldCol>ncol meaning moved left
-//                    board[oldRow][oldCol] = EMPTY_POS;//remove the old position
-//                    board[nRow + 1][nCol + 1] = EMPTY_POS;//remove the enemies player
-//                    board[nRow][nCol] = player;//update the new position on board
-//                }
-//            }
-//            oldCol = nCol;
-//            oldRow = nRow;
-//        }
-//        //go to the next node in the chosen list
-//        optimal = optimal->single_source_moves_lists->head->next;
-//    }
-//}
-//void updateNumOfPlayers(unsigned short maxCaptures, Player player,int * numOfBPlayers, int* numOfTPlayers) {
-//  
-//    if (player == PLAYER_T) {//if T made a capture
-//          *numOfBPlayers = *numOfBPlayers - maxCaptures;
-//    }
-//    else {//if B made a capture
-//           *numOfTPlayers = *numOfTPlayers - maxCaptures;
-//    }
-//   
-//}

@@ -40,4 +40,8 @@ void freeRoute(SingleSourceMovesListCell* route);
 void makeEmptyMultipleList(multipleSourceMoveList* res);
 multipleSourceMoveList* FindAllPossiblePlayerMoves(Board board, Player player);
 void insertListToEndMultiplefList(multipleSourceMoveList* multipleList, multipleSourceMoveListCell* newList);
+//from others
+void RemoveSingleSourceMovesList(multipleSourceMoveList* list);
+void makeMove(Board board, SingleSourceMovesList* move,Player player);
+SingleSourceMovesList* getSingleSourceMovesListByIndex(multipleSourceMoveList* list, int index);
 #endif //LIST_H

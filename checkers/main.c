@@ -6,7 +6,7 @@
 void main()
 {
     Player player;
-    player = 'T';
+    player = 'B';
     //multipleSourceMoveList* res;
     //Board board = { {0,0,0,0,0,0,0,0},
     //                 {0,0,0,0,0,0,0,0},
@@ -28,15 +28,16 @@ void main()
     //                 {0,0,0,0,'B',0,0,0} };
     //checkersPos pos = { 'H',5 }; //testing
    
-    Board board = { {0,0,0,'T',0,0,0,0},
+   /* Board board = { {0,0,0,'T',0,0,0,0},
                     {0,0,'B',0,'B',0,0,0},
                     {0,0,0,0,0,0,0,0},
                     {0,0,0,0,'B',0,'B',0},
                     {0,0,0,0,0,0,0,0},
                     {0,0,0,0,0,0,0,0},
                     {0,0,0,0,0,0,0,0},
-                    {0,0,0,0,0,0,0,0} };
-    //checkersPos pos = { 'A',4 }; //testing
+                    {0,0,0,0,0,0,0,0} };*/
+
+    //checkersPos pos = { 'H',4 }; //testing
 
     /*Board board = { {0,0,0,'T',0,0,0,0},
                     {0,0,'B',0,'B',0,0,0},
@@ -51,6 +52,14 @@ void main()
     //SingleSourceMovesTree* TreeOfSingleMove;
 
     //SingleSourceMovesList* list;
+    Board board = { {0,0,0,0,0,0,0,0},
+                   {0,0,0,0,0,0,0,0},
+                   {0,0,0,0,0,0,0,0},
+                   {0,0,0,0,0,0,0,0},
+                   {0,0,'T',0,0,0,0,0},
+                   {0,0,0,0,0,'T',0,0},
+                   {0,0,'T',0,'B',0,0,0},
+                   {0,0,0,'B',0,0,0,0} };
 
     //TreeOfSingleMove = FindSingleSourceMoves(board, &pos);
 
