@@ -23,7 +23,7 @@ SingleSourceMovesList* FindSingleSourceOptimalMove(SingleSourceMovesTree* moves_
 
 	//maxRouteList(res,capturesOfRoute,arr)
 	
-
+	freeTree(moves_tree);
 	return res;
 }
 
@@ -123,37 +123,6 @@ multipleSourceMoveList* FindAllPossiblePlayerMoves(Board board, Player player)
 	}
 	return res;
 }
-//void FindMaxRoute(SingleSourceMovesTreeNode* source, char player,unsigned short* capturesOfRoute) {
-//	unsigned short captureRouteLeft, captureRouteRight;
-//
-//	if (source == NULL) {//if empty tree return
-//		*capturesOfRoute = 0;
-//		return;
-//	}
-	//if its a leaf, we return the capture move in it
-	//else if ((source->next_move[LEFT] == NULL) && (source->next_move[RIGHT] == NULL)) {
-	//	*capturesOfRoute = source->total_captures_so_far;
-	//	return;
-	//}
-//	//create list node
-//	//adding the col to compare later to get the best route
-//	//colsArr[level] = (source->pos->col)-CHAR_0;
-//
-//	FindMaxRoute(source->next_move[LEFT], player,&captureRouteLeft);
-//	FindMaxRoute(source->next_move[RIGHT], player,&captureRouteRight);
-//	
-	//if (captureRouteRight == captureRouteLeft) {//same number of captures
-	//	//rule in page 2
-	//	if (player == PLAYER_T) {
-	//	
-	//	}
-	//	else {//player is B
-	//		
-	//	}
-	//	*capturesOfRoute = captureRouteRight;//return the max number of capture(they are equal)
-	//}
-	//if the captures on the right are more than on left
-	//else if (captureRouteRight > captureRouteLeft) {
 void insertListToEndMultiplefList(multipleSourceMoveList* multipleList, multipleSourceMoveListCell* newList)
 {
 	if (multipleList->head == NULL)

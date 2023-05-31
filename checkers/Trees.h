@@ -24,4 +24,6 @@ SingleSourceMovesTreeNode* createNewTNode(Board board, int row, int col, unsigne
     SingleSourceMovesTreeNode* nextMoveLeft, SingleSourceMovesTreeNode* nextMoveRight);
 void captureMove(char player, int direction, Board board, int row, int col, int* nRow, int* nCol, unsigned short* capturesSoFar, Board copyBoard);
 void singleMove(SingleSourceMovesTreeNode* root, char player, int direction, Board board, int row, int col, int* nRow, int* nCol, unsigned short* capturesSoFar);
+void freeTree(SingleSourceMovesTree *tr);
+void freeTreeHelper(SingleSourceMovesTreeNode* root);
 #endif //TREE_H

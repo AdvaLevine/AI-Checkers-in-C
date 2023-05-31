@@ -358,6 +358,20 @@ void singleMove(SingleSourceMovesTreeNode* root, char player, int direction, Boa
     }
 }
 
+void freeTree(SingleSourceMovesTree *tr)
+{
+    freeTreeHelper(tr->source);
+}
 
-
-
+void freeTreeHelper(SingleSourceMovesTreeNode* root)
+{
+    if (root == NULL)
+        return;
+    else
+    {
+        freeTreeHelper(root->next_move[LEFT]);
+        freeTreeHelper(root->next_move[RIGHT]);
+        free(root->pos);
+        free(root);
+    }
+}

@@ -336,3 +336,22 @@ void RemoveSingleSourceMovesList(multipleSourceMoveList* list) {
 
 }
 
+void PlayGame(Board board, Player starting_player)
+{
+
+
+
+}
+
+void printBoard(Board board)
+{
+    int i, j;
+    for(i=0; i<)
+
+}
+
+void printMidLine()
+{
+    int i;
+    for(i=0; i<)
+}

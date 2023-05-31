@@ -22,6 +22,10 @@
 #define PLAYER_T 'T'
 #define PLAYER_B 'B'
 #define MAX_CAPTURES_FOR_SINGLE_MOVE 4
+#define PLUS '+'
+#define PLUSMINUS '+-'
+#define PLUS_MINUS_LINE_LEN 9
+
 
 
 //structs
