@@ -7,7 +7,7 @@ void main()
 {
     Player player;
     player = 'B';
-    //multipleSourceMoveList* res;
+    multipleSourceMoveList* res;
     //Board board = { {0,0,0,0,0,0,0,0},
     //                 {0,0,0,0,0,0,0,0},
     //                 {0,0,0,0,0,0,0,0},
@@ -64,8 +64,8 @@ void main()
     //TreeOfSingleMove = FindSingleSourceMoves(board, &pos);
 
     //list = FindSingleSourceOptimalMove(TreeOfSingleMove);
-    //res = FindAllPossiblePlayerMoves(board, 'B');
-    Turn(board, player);
+    res = FindAllPossiblePlayerMoves(board, 'B');
+    //Turn(board, player);
     //free if needed
     //free treeNodes and free tree source-> free insdie treenode- checkerspos
 }
