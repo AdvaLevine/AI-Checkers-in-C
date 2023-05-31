@@ -2,12 +2,36 @@
 #include "Trees.h"
 #include "Lists.h"
 
+
 //main function
 void main()
 {
     Player player;
     player = 'B';
     multipleSourceMoveList* res;
+    Board board;
+    createBoard(board);
+    //SingleSourceMovesTree* TreeOfSingleMove;
+    //SingleSourceMovesList* list;
+   /* Board board = { {0,0,0,0,0,0,0,0},
+                   {0,0,0,0,0,0,0,0},
+                   {0,0,0,0,0,0,0,0},
+                   {0,0,0,0,0,0,0,0},
+                   {0,0,'T',0,0,0,0,0},
+                   {0,0,0,0,0,'T',0,0},
+                   {0,0,'T',0,'B',0,0,0},
+                   {0,0,0,'B',0,0,0,0} };*/
+
+    //TreeOfSingleMove = FindSingleSourceMoves(board, &pos);
+    //list = FindSingleSourceOptimalMove(TreeOfSingleMove);
+    //res = FindAllPossiblePlayerMoves(board, 'B');
+    //printBoard(board);
+    PlayGame(board, player);
+    //Turn(board, player);
+    //free if needed
+    //free treeNodes and free tree source-> free insdie treenode- checkerspos
+}
+
     //Board board = { {0,0,0,0,0,0,0,0},
     //                 {0,0,0,0,0,0,0,0},
     //                 {0,0,0,0,0,0,0,0},
@@ -39,7 +63,7 @@ void main()
 
     //checkersPos pos = { 'H',4 }; //testing
 
-    /*Board board = { {0,0,0,'T',0,0,0,0},
+   /* Board board = { {0,0,0,'T',0,0,0,0},
                     {0,0,'B',0,'B',0,0,0},
                     {0,0,0,0,0,0,0,0},
                     {0,0,'B',0,0,0,0,0},
@@ -47,25 +71,3 @@ void main()
                     {0,0,0,0,0,0,0,0},
                     {0,0,0,0,0,0,0,0},
                     {0,0,0,0,0,0,0,0} };*/
-    //Board board;
-    //createBoard(board);
-    //SingleSourceMovesTree* TreeOfSingleMove;
-
-    //SingleSourceMovesList* list;
-    Board board = { {0,0,0,0,0,0,0,0},
-                   {0,0,0,0,0,0,0,0},
-                   {0,0,0,0,0,0,0,0},
-                   {0,0,0,0,0,0,0,0},
-                   {0,0,'T',0,0,0,0,0},
-                   {0,0,0,0,0,'T',0,0},
-                   {0,0,'T',0,'B',0,0,0},
-                   {0,0,0,'B',0,0,0,0} };
-
-    //TreeOfSingleMove = FindSingleSourceMoves(board, &pos);
-
-    //list = FindSingleSourceOptimalMove(TreeOfSingleMove);
-    res = FindAllPossiblePlayerMoves(board, 'B');
-    //Turn(board, player);
-    //free if needed
-    //free treeNodes and free tree source-> free insdie treenode- checkerspos
-}

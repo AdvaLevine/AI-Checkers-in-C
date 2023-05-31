@@ -23,8 +23,12 @@
 #define PLAYER_B 'B'
 #define MAX_CAPTURES_FOR_SINGLE_MOVE 4
 #define PLUS '+'
-#define PLUSMINUS '+-'
+#define MINUS '-'
 #define PLUS_MINUS_LINE_LEN 9
+#define BOARD_PRINTING_SIZE 19
+#define FIRST_COL 1
+#define FIRST_ROW 'A'
+
 
 
 
@@ -48,6 +52,14 @@ void copyBorad(Board board, Board copyBoard);
 checkersPos* createPos(int row, int col);
 void Turn(Board board, Player player);
 int isGameFinished(Board board, Player player);
+void PlayGame(Board board, Player starting_player);
+void printBoard(Board board);
+void printMidLine();
 
+////constant int for max captures in game
+//extern int maxGameCaptures = 0;
+//extern char maxcapturePlayer = EMPTY_POS;
+//extern int countCapturesT = 0;
+//extern int countCapturesB = 0;
 
 #endif //MAIN_H

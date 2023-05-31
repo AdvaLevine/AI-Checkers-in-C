@@ -1,7 +1,11 @@
 #include "main.h"
 #include "Lists.h"
 
-
+//constant int for max captures in game
+extern int maxGameCaptures = 0;
+extern char maxcapturePlayer = EMPTY_POS;
+extern int countCapturesT = 0;
+extern int countCapturesB = 0;
 
 //function to create the board
 void createBoard(Board board) {
@@ -67,17 +71,17 @@ void copyBorad(Board board, Board copyBoard)
     }
 }
 void Turn(Board board, Player player) {
-
-    //checking if we can still continue in the game
-    if (isGameFinished(board, player)) {
-        return;//game finished
-    }
+    ////checking if we can still continue in the game
+    //if (isGameFinished(board, player)) {
+    //    return;//game finished
+    //}
 
     //game continues
     unsigned short maxCaptures = 0;
     int chosenMoveIndex = -1; //chosen list move
     int count = 0;
     int i=0;
+ 
     //find max and min cols and rows
     int minRow = BOARD_SIZE;//size that doesnt exist in board
     int minCol = BOARD_SIZE;//size that doesnt exist in board
@@ -150,17 +154,17 @@ void Turn(Board board, Player player) {
 
             while (currentListCell != NULL) {//as long as we have lists
                 currentMove = currentListCell->single_source_moves_lists;
-                if ((currentMove->tail->position->row)-CHAR_A < minRow)//if its a smaller row
-                    minRow = (currentMove->tail->position->row)-CHAR_A;//update min row
+                if ((currentMove->head->position->row)-CHAR_A < minRow)//if its a smaller row
+                    minRow = (currentMove->head->position->row)-CHAR_A;//update min row
 
-                if ((currentMove->tail->position->row)-CHAR_A > maxRow)//if its a higer row
-                    maxRow = (currentMove->tail->position->row)-CHAR_A;//update high row
+                if ((currentMove->head->position->row)-CHAR_A > maxRow)//if its a higer row
+                    maxRow = (currentMove->head->position->row)-CHAR_A;//update high row
 
-                if ((currentMove->tail->position->col)-CHAR_0 < minCol)//if its a smaller col
-                    minCol = (currentMove->tail->position->col)-CHAR_0;//update min col
+                if ((currentMove->head->position->col)-CHAR_0 < minCol)//if its a smaller col
+                    minCol = (currentMove->head->position->col)-CHAR_0;//update min col
 
-                if ((currentMove->tail->position->col)-CHAR_0 > maxCol)//if its a max col
-                    maxCol = (currentMove->tail->position->col)-CHAR_0;//update max col
+                if ((currentMove->head->position->col)-CHAR_0 > maxCol)//if its a max col
+                    maxCol = (currentMove->head->position->col)-CHAR_0;//update max col
 
                 //go to the next list
                 currentListCell = currentListCell->next;
@@ -211,6 +215,15 @@ void Turn(Board board, Player player) {
         }//else no large captures
     }//else more than 1 list
     
+    //update the max capture in the whole game
+    if (maxGameCaptures < maxCaptures) {
+        maxGameCaptures = maxCaptures;
+        if (player == PLAYER_B)
+            maxcapturePlayer = PLAYER_B;
+        else
+            maxcapturePlayer = PLAYER_T;
+    }
+
     //free
     RemoveSingleSourceMovesList(res);
 }
@@ -283,7 +296,8 @@ void makeMove(Board board, SingleSourceMovesList* move, Player player) {
     int row = (move->head->position->row) - CHAR_A;
     board[(move->tail->position->row)-CHAR_A][(move->tail->position->col)-CHAR_0-1] = board[(move->head->position->row)-CHAR_A][(move->head->position->col)-CHAR_0-1];
     board[(move->head->position->row) - CHAR_A][(move->head->position->col) - CHAR_0 - 1] = EMPTY_POS;
-    
+     
+    printf("%c%d->%c%d\n", move->head->position->row, move->head->position->col, move->tail->position->row, move->tail->position->col);
     // Checking for any capture moves and removing the captured positions
     if (move->tail->captures != 0) {
         SingleSourceMovesListCell* currentPos = move->head->next;
@@ -308,6 +322,7 @@ void makeMove(Board board, SingleSourceMovesList* move, Player player) {
             currentPos = currentPos->next;
         }
     }
+   
 }
 //free func
 void RemoveSingleSourceMovesList(multipleSourceMoveList* list) {
@@ -338,20 +353,75 @@ void RemoveSingleSourceMovesList(multipleSourceMoveList* list) {
 
 void PlayGame(Board board, Player starting_player)
 {
+    ////constant int for max captures in game
+    //int maxGameCaptures = 0;
+    //char maxcapturePlayer = EMPTY_POS;
+    //int countCapturesT = 0;
+    //int countCapturesB = 0;
+    printBoard(board);
+    Player currentPlayer = starting_player;
+    while (isGameFinished(board,currentPlayer)) {//while game isnt finished
+
+        printf("%c's turn:\n",currentPlayer);
+        Turn(board, currentPlayer);
 
 
+
+
+
+        printBoard(board);
+
+        //change players
+        if (currentPlayer == PLAYER_B)
+            currentPlayer = PLAYER_T;
+        else
+            currentPlayer = PLAYER_B;
+    }
 
 }
 
 void printBoard(Board board)
 {
-    int i, j;
-    for(i=0; i<)
+    int i,j,value;
+    int row=0, col=0;
+    char letter = FIRST_ROW;;
+    for (i = 0; i < BOARD_PRINTING_SIZE; i++)
+    {
+        if (i == 1) {//print the line of line numbers
+            printf("%c ", PLUS);
+            for (value = FIRST_COL; value <= BOARD_SIZE; value++)
+                printf("|%d", value);
+        printf("|\n");
+        }
+        else if (i % 2 == 0)//print the plus and minus line
+        {
+            printMidLine();
+        }
+        
+        else//print the board
+        {
+            printf("|%c", letter);
+            col = 0;
+            for (j = 0; j < BOARD_SIZE; j++) {
+                if (board[row][col] == NULL) 
+                    printf("| ");
+                else
+                    printf("|%c", board[row][col]);
+                col++;
+            }
+            printf("|\n");
+            letter++; 
+            row++;
+
+        }
+    }
 
 }
 
 void printMidLine()
 {
     int i;
-    for(i=0; i<)
+    for (i = 0; i < PLUS_MINUS_LINE_LEN; i++)
+        printf("%c%c", PLUS, MINUS);
+    printf("%c\n", PLUS); //last plus in the line
 }

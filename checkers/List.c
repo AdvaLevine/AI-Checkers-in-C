@@ -50,12 +50,20 @@ SingleSourceMovesListCell* createOptimalListFromTree(SingleSourceMovesTreeNode* 
 	if (captureRouteRight == captureRouteLeft) {//same number of captures
 		//rule in page 2
 		if (player == PLAYER_T) {
-			root->next = rightListNode;
-			freeRoute(leftListNode); //free the left route
+			if (rightListNode != NULL) {
+				root->next = rightListNode;
+					freeRoute(leftListNode); //free the left route
+			}
+			else
+				root->next=leftListNode;
 		}
 		else {//player is B
-			root->next = leftListNode;
-			freeRoute(rightListNode); //free the right route
+			if (leftListNode != NULL) {
+				root->next = leftListNode;
+				freeRoute(rightListNode); //free the right route
+			}
+			else
+				root->next = rightListNode;
 		}
 		*capturesOfRoute = captureRouteRight;//return the max number of capture(they are equal)
 	}
@@ -79,7 +87,6 @@ SingleSourceMovesListCell* getTail(SingleSourceMovesList* lst, unsigned short ca
 {
 	SingleSourceMovesListCell* curr;
 	curr = lst->head;
-
 	if (captures == 0) {//no cpature moves
 		curr = lst->head->next;
 	}
