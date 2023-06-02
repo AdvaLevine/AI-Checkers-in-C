@@ -8,7 +8,7 @@ void main()
 {
     Player player;
     player = 'B';
-    multipleSourceMoveList* res;
+    //multipleSourceMoveList* res;
     Board board;
     createBoard(board);
     //SingleSourceMovesTree* TreeOfSingleMove;

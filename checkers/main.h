@@ -51,7 +51,7 @@ void createBoard(Board board);
 void copyBorad(Board board, Board copyBoard);
 checkersPos* createPos(int row, int col);
 void Turn(Board board, Player player);
-int isGameFinished(Board board, Player player);
+bool isGameNotFinished(Board board, Player player);
 void PlayGame(Board board, Player starting_player);
 void printBoard(Board board);
 void printMidLine();

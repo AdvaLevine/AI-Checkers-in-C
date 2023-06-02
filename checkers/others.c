@@ -179,22 +179,23 @@ void Turn(Board board, Player player) {
                 currentMove = currentListCell->single_source_moves_lists;
             //if its player B we choose lowest row and then if there are equal rows then lowest cols
                 if (player == PLAYER_B) {
-                    if ((currentMove->tail->position->row) - CHAR_A == minRow && (currentMove->tail->position->col) - CHAR_0 < minCol) {
-                        bestMove = true;//found best move
+                    if ((currentMove->head->position->row) - CHAR_A == minRow ) {
+                        if ((currentMove->head->position->col) - CHAR_0 == minCol)
+                            bestMove = true;//found best move
+                        chosenMove = currentMove;//found best move
                     }
-                    else if ((currentMove->tail->position->row) - CHAR_A == minRow) {
-                        bestMove = true;//found best move
+                    if ((currentMove->head->position->row) - CHAR_A > minRow) {
+                        bestMove=true;
                     }
-                
                 }
             //if its player T we choose highest row and then if there are equal rows then highest cols
                 else if (player == PLAYER_T) {
                 
-                    if ((currentMove->tail->position->row)-CHAR_A == maxRow && (currentMove->tail->position->col)-CHAR_0 > maxCol) {
+                    if ((currentMove->head->position->row)-CHAR_A == maxRow && (currentMove->head->position->col)-CHAR_0 == maxCol) {
                         bestMove = true;//found best move
                     }
-                    else if ((currentMove->tail->position->row)-CHAR_A == maxRow) {
-                        bestMove = true;//found best move
+                    else if ((currentMove->head->position->row)-CHAR_A == maxRow) {
+                        chosenMove = currentMove;//found best move
                     }
                 }
                 //found best move=>update the list to be the list we just found
@@ -228,7 +229,7 @@ void Turn(Board board, Player player) {
     RemoveSingleSourceMovesList(res);
 }
 //function to check if the game is finished
-int isGameFinished(Board board, Player player) {
+bool isGameNotFinished(Board board, Player player) {
     int i, j;
     int playerBPieces = 0;
     int playerTPieces = 0;
@@ -247,14 +248,14 @@ int isGameFinished(Board board, Player player) {
 
 //checking if everyone still has game pieces
     if (playerBPieces == 0 || playerTPieces == 0) {
-        return 1;  //game over
+        return false;  //game over
     }
 
 //checking if player B is in the first row
     if (player == PLAYER_B) {
         for (i = 0; i < BOARD_SIZE; i++) {
             if (board[0][i] == player) {
-                return 1; //B won-game over
+                return false; //B won-game over
             }
         }
     }
@@ -262,12 +263,12 @@ int isGameFinished(Board board, Player player) {
     else if (player == PLAYER_T) {
         for (i = 0; i < BOARD_SIZE; i++) {
             if (board[BOARD_SIZE - 1][i] == player) {
-                return 1; //T won-game over
+                return false; //T won-game over
             }
         }
     }
 
-    return 0; //game ont over yet
+    return true; //game ont over yet
 }
 //gets the index for where the list is and then looks out for the list in the lists of mult lists
 SingleSourceMovesList* getSingleSourceMovesListByIndex(multipleSourceMoveList* list, int index) {
@@ -360,7 +361,7 @@ void PlayGame(Board board, Player starting_player)
     //int countCapturesB = 0;
     printBoard(board);
     Player currentPlayer = starting_player;
-    while (isGameFinished(board,currentPlayer)) {//while game isnt finished
+    while (isGameNotFinished(board,currentPlayer)) {//while game isnt finished
 
         printf("%c's turn:\n",currentPlayer);
         Turn(board, currentPlayer);

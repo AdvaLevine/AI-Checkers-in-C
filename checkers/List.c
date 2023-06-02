@@ -87,7 +87,8 @@ SingleSourceMovesListCell* getTail(SingleSourceMovesList* lst, unsigned short ca
 {
 	SingleSourceMovesListCell* curr;
 	curr = lst->head;
-	if (captures == 0) {//no cpature moves
+
+	if (captures == 0&& curr->next!=NULL) {//one move to do
 		curr = lst->head->next;
 	}
 	//there are capture moves
