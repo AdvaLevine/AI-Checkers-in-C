@@ -130,6 +130,8 @@ void Turn(Board board, Player player) {
         //    }
         //    res = res-next;
         //}
+        
+        //best move of highest captures
         currentListCell = res->head;
         while (currentListCell != NULL) {
             currentMove = currentListCell->single_source_moves_lists;
@@ -149,7 +151,16 @@ void Turn(Board board, Player player) {
         }
         else//there wasnt a max capture move- we'll use rule number 4
         {
-
+            currentListCell = res->head;
+            if (player == PLAYER_B) {
+                chosenMove = currentListCell->single_source_moves_lists;
+                makeMove(board, chosenMove, player); //change the board
+            }
+            else {//player T
+                currentListCell = res->tail;
+                chosenMove = currentListCell->single_source_moves_lists;
+                makeMove(board, chosenMove, player); //change the board
+            }
         }
 
         //looking for the min and max rows and cols so we can choose the best move
@@ -358,6 +369,7 @@ void RemoveSingleSourceMovesList(multipleSourceMoveList* list) {
 
 void PlayGame(Board board, Player starting_player)
 {
+    int i = 0;
     ////constant int for max captures in game
     //int maxGameCaptures = 0;
     //char maxcapturePlayer = EMPTY_POS;
@@ -366,7 +378,6 @@ void PlayGame(Board board, Player starting_player)
     printBoard(board);
     Player currentPlayer = starting_player;
     while (isGameNotFinished(board,currentPlayer)) {//while game isnt finished
-
         printf("%c's turn:\n",currentPlayer);
         Turn(board, currentPlayer);
 
@@ -381,6 +392,7 @@ void PlayGame(Board board, Player starting_player)
             currentPlayer = PLAYER_T;
         else
             currentPlayer = PLAYER_B;
+        i++;
     }
 
 }
