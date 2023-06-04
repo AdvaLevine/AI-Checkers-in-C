@@ -175,7 +175,7 @@ void Turn(Board board, Player player) {
                         found = true;
                     else
                     {
-                        currentListCell->single_source_moves_lists = getSingleSourceMovesListByIndex(res, count - i);
+                        currentListCell->single_source_moves_lists = getSingleSourceMovesListByIndex(res, count - i-1);
                         i++;
                     }
                 }

@@ -61,11 +61,10 @@ SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char p
                     //    copyBoard[row][col] = EMPTY_POS; //changing current checkerPos
                     //    copyBoard[row + 1][col + 1] = EMPTY_POS; //eaten
                     //    copyBoard[nRow][nCol] = PLAYER_T; //moving 'T' 2 cols right 2 rows down
-                    captureMove(player, RIGHT, board,row , col,&nRow,&nCol, &tempCaptures, copyBoardRight);
-                    root->next_move[RIGHT] = buildTreeHelper(copyBoardRight, nRow, nCol, player, tempCaptures);
-                    /*}*/
-                    //else
-                    //    root->next_move[RIGHT] = NULL;
+                    if(captureMove(player, RIGHT, board,row , col,&nRow,&nCol, &tempCaptures, copyBoardRight))
+                        root->next_move[RIGHT] = buildTreeHelper(copyBoardRight, nRow, nCol, player, tempCaptures);
+                    else
+                        root->next_move[RIGHT] = NULL;
                 }
             }
             else if (right == EMPTY_POS && capturesSoFar == 0) //no captures, one move to go
@@ -99,14 +98,13 @@ SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char p
                     //    copyBoard[row+1][col + 1] = EMPTY_POS; //eaten
                     //    copyBoard[nRow][nCol] = PLAYER_T; //moving 'T' 2 cols right 2 rows down
                     unsigned short tempCaptures = capturesSoFar;
-                    captureMove(player, LEFT, board, row, col,&nRow,&nCol, &tempCaptures, copyBoardLeft);
-                    root->next_move[LEFT] = buildTreeHelper(copyBoardLeft, nRow, nCol, player, tempCaptures);
-                    //}
+                    if(captureMove(player, LEFT, board, row, col,&nRow,&nCol, &tempCaptures, copyBoardLeft))
+                        root->next_move[LEFT] = buildTreeHelper(copyBoardLeft, nRow, nCol, player, tempCaptures);
+                    else
+                        root->next_move[LEFT] == NULL;
                 }
 
-                //else
-
-                //root->next_move[LEFT] == NULL;
+  
 
             }
 
@@ -151,11 +149,10 @@ SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char p
                     //    copyBoard[row + 1][col + 1] = EMPTY_POS; //eaten
                     //    copyBoard[nRow][nCol] = PLAYER_B; //moving 'T' 2 cols right 2 rows down
                     unsigned short tempCaptures = capturesSoFar;
-                    captureMove(player, RIGHT, board, row, col, &nRow, &nCol, &tempCaptures, copyBoardRight);
-                    root->next_move[RIGHT] = buildTreeHelper(copyBoardRight, nRow, nCol, player, tempCaptures);
-                    //}
-                    //else
-                    //    root->next_move[RIGHT] = NULL;
+                    if(captureMove(player, RIGHT, board, row, col, &nRow, &nCol, &tempCaptures, copyBoardRight)) //if there's captures
+                        root->next_move[RIGHT] = buildTreeHelper(copyBoardRight, nRow, nCol, player, tempCaptures);
+                    else
+                        root->next_move[RIGHT] = NULL;
                 }
             }
             else if (right == EMPTY_POS && capturesSoFar == 0)
@@ -188,14 +185,12 @@ SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char p
                     //    copyBoard[row+1][col + 1] = EMPTY_POS; //eaten
                     //    copyBoard[nRow][nCol] = PLAYER_T; //moving 'T' 2 cols right 2 rows down
                     unsigned short tempCaptures = capturesSoFar;
-                    captureMove(player, LEFT, board, row, col, &nRow, &nCol, &tempCaptures, copyBoardLeft);
-                    root->next_move[LEFT] = buildTreeHelper(copyBoardLeft, nRow, nCol, player, tempCaptures);
-                    //}
+                    if(captureMove(player, LEFT, board, row, col, &nRow, &nCol, &tempCaptures, copyBoardLeft))
+                        root->next_move[LEFT] = buildTreeHelper(copyBoardLeft, nRow, nCol, player, tempCaptures);
+                    
+                    else
+                        root->next_move[LEFT] == NULL;
                 }
-
-                //else
-                //root->next_move[LEFT] == NULL;
-
             }
 
             else if (left == EMPTY_POS && capturesSoFar == 0)
@@ -266,9 +261,9 @@ void memoryAllocationCheckTree(SingleSourceMovesTree* res) {
     }
 }
 //function for caprute moves of T an B
-void captureMove(char player,int direction,Board board, int row, int col,int* nRow,int*nCol, unsigned short* capturesSoFar,Board copyBoard) {
+bool captureMove(char player,int direction,Board board, int row, int col,int* nRow,int*nCol, unsigned short* capturesSoFar,Board copyBoard) {
 
-    
+    bool res =true;
     if (player == PLAYER_T) {
         if (direction == RIGHT) {
             *nRow = row + 2;
@@ -282,15 +277,17 @@ void captureMove(char player,int direction,Board board, int row, int col,int* nR
         //if theres an empty space afetr the B
         if (board[*nRow][*nCol] == NULL)
         {
-          (*capturesSoFar)++;
-          copyBoard[row][col] = EMPTY_POS; //changing current checkerPos
-          copyBoard[*nRow][*nCol] = PLAYER_T; //moving 'T' 2 cols (right or left) 2 rows down
-          
-          if (direction ==RIGHT)
-            copyBoard[row + 1][col + 1] = EMPTY_POS; //eaten the right B
-          if (direction ==LEFT)
-            copyBoard[row + 1][col - 1] = EMPTY_POS; //eat the left B
+            (*capturesSoFar)++;
+            copyBoard[row][col] = EMPTY_POS; //changing current checkerPos
+            copyBoard[*nRow][*nCol] = PLAYER_T; //moving 'T' 2 cols (right or left) 2 rows down
+
+            if (direction == RIGHT)
+                copyBoard[row + 1][col + 1] = EMPTY_POS; //eaten the right B
+            if (direction == LEFT)
+                copyBoard[row + 1][col - 1] = EMPTY_POS; //eat the left B
         }
+        else
+            res = false;
        
     }
     else {//player==PLAYER_B
@@ -315,7 +312,10 @@ void captureMove(char player,int direction,Board board, int row, int col,int* nR
             if (direction == LEFT)
                 copyBoard[row - 1][col - 1] = EMPTY_POS; //eat the left A
         }
+        else
+            res = false;
     }
+    return res;
 }
 //this function is for one move only if there are no cature moves available
 void singleMove(SingleSourceMovesTreeNode* root, char player, int direction, Board board, int row, int col, int* nRow, int* nCol, unsigned short* capturesSoFar) {

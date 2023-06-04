@@ -22,7 +22,7 @@ void memoryAllocationCheckTree(SingleSourceMovesTree* res);
 SingleSourceMovesTreeNode* buildTreeHelper(Board board, int row, int col, char player, unsigned short capturesSoFar);
 SingleSourceMovesTreeNode* createNewTNode(Board board, int row, int col, unsigned short captures,
     SingleSourceMovesTreeNode* nextMoveLeft, SingleSourceMovesTreeNode* nextMoveRight);
-void captureMove(char player, int direction, Board board, int row, int col, int* nRow, int* nCol, unsigned short* capturesSoFar, Board copyBoard);
+bool captureMove(char player, int direction, Board board, int row, int col, int* nRow, int* nCol, unsigned short* capturesSoFar, Board copyBoard);
 void singleMove(SingleSourceMovesTreeNode* root, char player, int direction, Board board, int row, int col, int* nRow, int* nCol, unsigned short* capturesSoFar);
 void freeTree(SingleSourceMovesTree *tr);
 void freeTreeHelper(SingleSourceMovesTreeNode* root);
