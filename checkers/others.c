@@ -501,6 +501,7 @@ void PlayGame(Board board, Player starting_player)
     int countTMoves = 0;
     printBoard(board);
     Player currentPlayer = starting_player;
+    
     while (isGameNotFinished(board,currentPlayer)) {//while game isnt finished
         printf("%c's turn:\n",currentPlayer);
         Turn(board, currentPlayer);
@@ -519,9 +520,9 @@ void PlayGame(Board board, Player starting_player)
     }
     //the other way around because when we leave the loop we change the players
     if (currentPlayer == PLAYER_B)
-        printf("T preformed %d moves.\n",countBMoves);
+        printf("T preformed %d moves.\n",countTMoves);
     else
-        printf("B preformed %d moves.\n", countTMoves);
+        printf("B preformed %d moves.\n", countBMoves);
 
     printf("%c preformed the highest number of captures in a single move - %d", maxcapturePlayer, maxGameCaptures);
 
