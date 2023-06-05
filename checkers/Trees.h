@@ -1,3 +1,4 @@
+//This header is for the structs and functions calls in function Trees.c
 #ifndef TREE_H
 #define TREE_H
 #include "main.h"

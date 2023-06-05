@@ -24,7 +24,7 @@ else if its the same number of captures or there are no high captures and no equ
 if it's player T, it'll always choose the highest row, else the highest col
 if it's player B, it'll always choose the lowest row, else the lowest col
 when the game is done, the winner is declared and its number of moves, 
-as well as the name of the player with the most captures and the amount of captures they did
+as well as the name of the player with the most captures and the amount of captures they did.
 GOOD LUCK AND ENJOY! :)
 */
 void main()

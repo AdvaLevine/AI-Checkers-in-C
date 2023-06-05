@@ -1,24 +1,29 @@
+//This header is for the structs and function calls in List.c
 #ifndef LIST_H
 #define LIST_H
 #include "Trees.h"
 #include "main.h"
 
+//struct for a single move list node
 typedef struct _SingleSourceMovesListCell {
 	checkersPos *position;
 	unsigned short captures;
 	struct _SingleSourceMovesListCell *next;
 }SingleSourceMovesListCell;
 
+//struct for a single move list
 typedef struct _SingleSourceMovesList {
 	SingleSourceMovesListCell *head;
 	SingleSourceMovesListCell *tail;
 }SingleSourceMovesList;
 
+//struct for a multi moves list cell
 typedef struct _multipleSourceMoveListCell {
 	SingleSourceMovesList* single_source_moves_list;
 	struct _multipleSourceMoveListCell* next;
 }multipleSourceMoveListCell;
 
+//struct for a multi moves list
 typedef struct _multipleSourceMoveList {
 	multipleSourceMoveListCell* head;
 	multipleSourceMoveListCell* tail;
@@ -40,8 +45,7 @@ void freeRoute(SingleSourceMovesListCell* route);
 void makeEmptyMultipleList(multipleSourceMoveList* res);
 multipleSourceMoveList* FindAllPossiblePlayerMoves(Board board, Player player);
 void insertListToEndMultiplefList(multipleSourceMoveList* multipleList, multipleSourceMoveListCell* newList);
-//from others
+//from others.c
 void RemoveSingleSourceMovesList(multipleSourceMoveList* list);
 void makeMove(Board board, SingleSourceMovesList* move,Player player);
-SingleSourceMovesList* getSingleSourceMovesListByIndex(multipleSourceMoveList* list, int index);
 #endif //LIST_H
