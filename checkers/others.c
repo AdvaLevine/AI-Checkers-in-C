@@ -136,9 +136,19 @@ void Turn(Board board, Player player) {
             currentMove = currentListCell->single_source_moves_lists;
             //checking the captures in the tail to see if it's the maximum
             if (currentMove->tail != NULL) {
-                if (currentMove->tail->captures > maxCaptures) {
-                    maxCaptures = currentMove->tail->captures;
-                    chosenMoveIndex = currentIndex; //found the best move list
+                if (currentMove->tail->captures != 0) {
+                    if (player == PLAYER_T) {
+                        if (currentMove->tail->captures >= maxCaptures) {
+                            maxCaptures = currentMove->tail->captures;
+                            chosenMoveIndex = currentIndex; //found the best move list
+                        }
+                    }
+                    else if (player == PLAYER_B) {
+                        if (currentMove->tail->captures > maxCaptures) {
+                            maxCaptures = currentMove->tail->captures;
+                            chosenMoveIndex = currentIndex; //found the best move list
+                        }
+                    }
                 }
             }
             currentListCell = currentListCell->next;
@@ -153,26 +163,26 @@ void Turn(Board board, Player player) {
         else //there wasnt a max capture move- we'll use rule number 4
         { 
 
-       currentListCell = res->head;
-        //looking for max row min row max col min col
-        while (currentListCell != NULL) {//as long as we have lists
-            currentMove = currentListCell->single_source_moves_lists;
-            if ((currentMove->head->position->row) - CHAR_A < minRow)//if its a smaller row
-                minRow = (currentMove->head->position->row) - CHAR_A;//update min row
+       //currentListCell = res->head;
+       // //looking for max row min row max col min col
+       // while (currentListCell != NULL) {//as long as we have lists
+       //     currentMove = currentListCell->single_source_moves_lists;
+       //     if ((currentMove->head->position->row) - CHAR_A < minRow)//if its a smaller row
+       //         minRow = (currentMove->head->position->row) - CHAR_A;//update min row
 
-            if ((currentMove->head->position->row) - CHAR_A > maxRow)//if its a higer row
-                maxRow = (currentMove->head->position->row) - CHAR_A;//update high row
+       //     if ((currentMove->head->position->row) - CHAR_A > maxRow)//if its a higer row
+       //         maxRow = (currentMove->head->position->row) - CHAR_A;//update high row
 
-            if ((currentMove->head->position->col) - CHAR_0 < minCol)//if its a smaller col
-                minCol = (currentMove->head->position->col) - CHAR_0;//update min col
+       //     if ((currentMove->head->position->col) - CHAR_0 < minCol)//if its a smaller col
+       //         minCol = (currentMove->head->position->col) - CHAR_0;//update min col
 
-            if ((currentMove->head->position->col) - CHAR_0 > maxCol)//if its a max col
-                maxCol = (currentMove->head->position->col) - CHAR_0;//update max col
+       //     if ((currentMove->head->position->col) - CHAR_0 > maxCol)//if its a max col
+       //         maxCol = (currentMove->head->position->col) - CHAR_0;//update max col
 
-            //go to the next list
-            currentListCell = currentListCell->next;
-        }
-        
+       //     //go to the next list
+       //     currentListCell = currentListCell->next;
+       // }
+       // 
             bool found = false;
             if (player == PLAYER_B) {
                 currentListCell = res->head;
