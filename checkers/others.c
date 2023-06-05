@@ -70,11 +70,7 @@ void copyBorad(Board board, Board copyBoard)
 }
 void Turn(Board board, Player player) {
     ////checking if we can still continue in the game
-    //if (isGameFinished(board, player)) {
-    //    return;//game finished
-    //}
 
-    //game continues
     unsigned short maxCaptures = 0, currentCaptures =0;
     int chosenMoveIndex = -1; //chosen list move
     int count = 0;
