@@ -2,7 +2,7 @@
 FINAL PROJECT IN ADVANCED PROGRAMMING IN C 
 - CHECKERS GAME-
 Names of creators:       ID number:
-Noa Halili
+Noa Halili               211486725
 Adva Levine              319098133
 */
 #include "main.h"
