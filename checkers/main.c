@@ -8,40 +8,23 @@ void main()
 {
     Player player;
     player = 'B';
-    //multipleSourceMoveList* res;
     Board board;
     createBoard(board);
-    //SingleSourceMovesTree* TreeOfSingleMove;
-    //SingleSourceMovesList* list;
-   /* Board board = { {0,0,0,0,0,0,0,0},
-                   {0,0,0,0,0,0,0,0},
-                   {0,0,0,0,0,0,0,0},
-                   {0,0,0,0,0,0,0,0},
-                   {0,0,'T',0,0,0,0,0},
-                   {0,0,0,0,0,'T',0,0},
-                   {0,0,'T',0,'B',0,0,0},
-                   {0,0,0,'B',0,0,0,0} };*/
-
-    //TreeOfSingleMove = FindSingleSourceMoves(board, &pos);
-    //list = FindSingleSourceOptimalMove(TreeOfSingleMove);
-    //res = FindAllPossiblePlayerMoves(board, 'B');
-    //printBoard(board);
     PlayGame(board, player);
-    //Turn(board, player);
+    //Board board = { {0,'T',0,'T',0,'T',0,'T'},
+    //               {'T',0,'T',0,0,0,'T',0},
+    //               {0,'B',0,0,0,0,0,0},
+    //               {0,0,0,0,'B',0,0,0},
+    //               {0,0,0,0,0,0,0,'B'},
+    //               {0,0,0,0,'T',0,0,0},
+    //               {0,'B',0,0,0,0,0,'B'},
+    //               {'B',0,'B',0,'B',0,'B',0} };
+
+    //PlayGame(board, player);
+    //Turn(board, PLAYER_T);
     //free if needed
     //free treeNodes and free tree source-> free insdie treenode- checkerspos
 }
-
-    //Board board = { {0,0,0,0,0,0,0,0},
-    //                 {0,0,0,0,0,0,0,0},
-    //                 {0,0,0,0,0,0,0,0},
-    //                 {0,0,0,0,0,0,0,0},
-    //                 {0,0,0,'T',0,'T',0,0},
-    //                 {0,0,0,0,0,0,0,0},
-    //                 {0,0,0,'T',0,'T',0,0},
-    //                 {0,0,0,0,'B',0,0,0} };
-    //checkersPos pos = { 'H',5 }; //testing
-
     //Board board = { {0,0,0,0,0,0,0,0},
     //                 {0,0,0,0,0,0,0,0},
     //                 {0,0,0,'T',0,'T',0,0},

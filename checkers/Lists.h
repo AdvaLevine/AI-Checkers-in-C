@@ -15,7 +15,7 @@ typedef struct _SingleSourceMovesList {
 }SingleSourceMovesList;
 
 typedef struct _multipleSourceMoveListCell {
-	SingleSourceMovesList* single_source_moves_lists;
+	SingleSourceMovesList* single_source_moves_list;
 	struct _multipleSourceMoveListCell* next;
 }multipleSourceMoveListCell;
 

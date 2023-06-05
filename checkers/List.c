@@ -124,7 +124,7 @@ multipleSourceMoveList* FindAllPossiblePlayerMoves(Board board, Player player)
 				tmpTree = FindSingleSourceMoves(board, tmpPos);
 				tmpListCell = (multipleSourceMoveListCell*)malloc(sizeof(multipleSourceMoveListCell));
 				checkAllocationListNode(tmpListCell);
-				tmpListCell->single_source_moves_lists =FindSingleSourceOptimalMove(tmpTree);
+				tmpListCell->single_source_moves_list =FindSingleSourceOptimalMove(tmpTree); //find the best route of captures from given position
 				insertListToEndMultiplefList(res, tmpListCell);
 			}
 		}
