@@ -5,7 +5,7 @@ Noa Halili
 Adva Levine              
 
 
-This program is a simple version of the game "Chcekers" we all know and love,
+This program is a simple version of the game "Checkers" we all know and love,
 the game is being played by the computer, it has a set of incoded rules it follows to accomplish its purpose.
 In this version, we have two players- Player T and Player B,
 Player T is at the top of the board, player B is at the bottom.
