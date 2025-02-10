@@ -1,12 +1,12 @@
 FINAL PROJECT IN ADVANCED PROGRAMMING IN C 
 - CHECKERS GAME-
 Names of creators:       
-Noa Halili               
+Noa Halali               
 Adva Levine              
 
 
 This program is a simple version of the game "Checkers" we all know and love,
-the game is being played by the computer, it has a set of incoded rules it follows to accomplish its purpose.
+the game is being played by the computer, it has a set of encoded rules it follows to accomplish its purpose.
 In this version, we have two players- Player T and Player B,
 Player T is at the top of the board, player B is at the bottom.
 each player has 12 starting tools, and in each round every player gets one turn,
